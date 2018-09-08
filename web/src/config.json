@@ -1,0 +1,10 @@
+{
+  "development": {
+    "web3Url": "http://localhost:8545",
+    "socketWeb3Url": "ws://localhost:8545"
+  },
+  "rinkeby": {
+    "web3Url": "https://rinkeby.infura.io",
+    "socketWeb3Url": "wss://rinkeby.infura.io/_ws"
+  }
+}

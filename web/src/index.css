@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.main-header {
+  margin: 0;
+  padding: 20px;
+  color: white;
+  background: #217f92;
+  text-align: center;
+}
+
+.main-content {
+  padding: 20px;
+}
