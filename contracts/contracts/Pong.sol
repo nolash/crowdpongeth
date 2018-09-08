@@ -13,10 +13,10 @@ contract Pong {
 	}
 
 	Game[] games;
-	uint256 currentGame = 0;
+	uint256 latestGame = 0;
 
 	event NewGame(uint256 index, string teamA, string teamB);
-	event NewParticipant(address user, string name);
+	event NewParticipant(uint256 gameIndex, address user, string name);
 
 	// creates a new game
 	// sender will be owner
@@ -28,18 +28,19 @@ contract Pong {
 		g.teamA = teamA;
 		g.teamB = teamB;
 		games.push(g);
-		emit NewGame(currentGame, teamA, teamB);
-		currentGame++;
+		emit NewGame(latestGame, teamA, teamB);
+		latestGame++;
 	}
 
 	// joins the sender to the game
-	function joinGame(address addr, string name) public {
-		require(canJoin());
-		require(!isParticipating(addr));
+	function joinGame(uint256 gameIndex, address addr, string name) public {
+		require(canJoin(gameIndex));
+		require(!isParticipating(gameIndex, addr));
 		bytes memory memoryString = bytes(name);
 		require(memoryString.length > 0);
-		games[currentGame].participants_idx[addr] = name;
-		games[currentGame].participants.push(addr);
+		games[gameIndex].participants_idx[addr] = name;
+		games[gameIndex].participants.push(addr);
+		NewParticipant(gameIndex, addr, name);
 	}
 
 	// game team A name
@@ -69,13 +70,13 @@ contract Pong {
 	}
 
 	// if a new user is currently allowed to join the active game
-	function canJoin() public view returns (bool) {
-		return !isParticipating(msg.sender) && games[currentGame].startTimestamp < now;
+	function canJoin(uint256 gameIndex) public view returns (bool) {
+		return !isParticipating(gameIndex, msg.sender) && games[gameIndex].startTimestamp < now;
 	}
 
 	// check if address is already participating in this game
-	function isParticipating(address addr) public view returns (bool) {
-		bytes memory memoryString = bytes(games[currentGame].participants_idx[addr]);
+	function isParticipating(uint256 gameIndex, address addr) public view returns (bool) {
+		bytes memory memoryString = bytes(games[gameIndex].participants_idx[addr]);
 		return memoryString.length == 0;
 	}
 
