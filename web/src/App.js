@@ -6,6 +6,7 @@ import {
   NavLink,
   HashRouter
 } from 'react-router-dom'
+import Game from './Views/Game'
 import Games from './Views/Games'
 import NewGame from './Views/NewGame'
 
@@ -45,12 +46,12 @@ class App extends Component {
         <div>
           <div className="main-header">
             <h1>[[-- Crowd Pong --]]</h1>
-            <div>account[0]: {this.state.account}</div>
           </div>
           <div className="main-content">
             <div>
               <Route exact path="/" component={Games}/>
               <Route exact path="/new-game" component={NewGame}/>
+              <Route exact path="/game/:gameIndex" component={Game}/>
             </div>
           </div>
         </div>

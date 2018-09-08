@@ -1,5 +1,40 @@
 [
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "games",
+    "outputs": [
+      {
+        "name": "maxScore",
+        "type": "uint8"
+      },
+      {
+        "name": "startTimestamp",
+        "type": "uint256"
+      },
+      {
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "name": "teamA",
+        "type": "string"
+      },
+      {
+        "name": "teamB",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -24,6 +59,11 @@
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": false,
+        "name": "gameIndex",
+        "type": "uint256"
+      },
       {
         "indexed": false,
         "name": "user",
@@ -63,6 +103,10 @@
   {
     "constant": false,
     "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      },
       {
         "name": "addr",
         "type": "address"
@@ -179,7 +223,12 @@
   },
   {
     "constant": true,
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
     "name": "canJoin",
     "outputs": [
       {
@@ -194,6 +243,10 @@
   {
     "constant": true,
     "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      },
       {
         "name": "addr",
         "type": "address"
