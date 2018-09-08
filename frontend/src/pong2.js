@@ -8,6 +8,14 @@ class State {
   setBall (ball) {
     this.ball = ball
   }
+
+  setPaddlePlayer1 (paddle) {
+    this.paddlePlayer1 = paddle
+  }
+
+  setPaddlePlayer2 (paddle) {
+    this.paddlePlayer2 = paddle
+  }
 }
 
 class Ball {
@@ -109,15 +117,17 @@ class Game {
     this.p2.y = this.height / 2 - this.p2.height / 2
     this.display2 = new Display(this.width * 3 / 4, 25)
     // Ball
-    this.ball = new Ball()
-    this.ball.x = this.width / 2
-    this.ball.y = this.height / 2
+    let ballX = this.width / 2
+    let ballY = this.width / 2
+    this.ball = new Ball(ballX, ballY)
+    // TODO: Define just one direction
     this.ball.vy = Math.floor(Math.random() * 12 - 6)
     this.ball.vx = 7 - Math.abs(this.ball.vy)
   }
 
   /// PUBLIC
   draw () {
+    drawTime()
     this.context.clearRect(0, 0, this.width, this.height)
     this.context.fillRect(this.width / 2, 0, 2, this.height)
 
@@ -209,19 +219,20 @@ class Game {
     }
   }
 }
-// TODO:  choose player 1 or player 2
-// Initialize our game instance
+
 const game = new Game()
 
 function drawTime () {
   document.getElementById('timeBox').innerHTML = Math.round(new Date().getTime() / 1000)
 }
 
-// TODO
 function MainLoop () {
-  // game.update()
-  // game.draw()
-  drawTime()
+  // trace and send movement
+  // get state
+  // set state
+  game.update()
+  game.draw()
+
   // Call the main loop again at a frame rate of 30fps
   setTimeout(MainLoop, 100)
 }
