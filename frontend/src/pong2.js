@@ -122,13 +122,12 @@ class Game {
     this.context.fillStyle = 'white'
     this.keys = new KeyListener()
     // Paddle 1
-    this.p1 = new Paddle(5, 0)
-    this.p1.y = this.height / 2 - this.p1.height / 2
+    this.p1 = this.getInitialPaddle1()
     // Display 1
     this.display1 = new Display(this.width / 4, 25)
     // Paddle 2
-    this.p2 = new Paddle(this.width - 5 - 2, 0)
-    this.p2.y = this.height / 2 - this.p2.height / 2
+    this.p2 = this.getInitialPaddle2()
+
     // Display 2
     this.display2 = new Display(this.width * 3 / 4, 25)
     // Ball
@@ -162,19 +161,31 @@ class Game {
     this.context.clearRect(0, 0, this.width, this.height)
   }
 
-  score (p) {
+  getInitialPaddle1 () {
+    var paddle = new Paddle(5, 0)
+    paddle.y = this.height / 2 - paddle.height / 2
+    return paddle
+  }
+
+  getInitialPaddle2 () {
+    var paddle = new Paddle(this.width - 5 - 2, 0)
+    paddle.y = this.height / 2 - paddle.height / 2
+    return paddle
+  }
+
+  score (player) {
     // player scores
-    p.score++
-    var player = p === this.p1 ? 0 : 1
+    player.score++
+    var isPlayer1Winner = player === this.p1
 
     // set ball position
     this.ball.x = this.width / 2
-    this.ball.y = p.y + p.height / 2
+    this.ball.y = player.y + player.height / 2
 
     // set ball velocity
     this.ball.vy = Math.floor(Math.random() * 12 - 6)
     this.ball.vx = 7 - Math.abs(this.ball.vy)
-    if (player === 1) {
+    if (isPlayer1Winner) {
       this.ball.vx *= -1
     }
   }
@@ -263,18 +274,17 @@ class Game {
   }
 }
 
-class DataFetcher {
+class StateManager {
     // we need swarm and web3 here
   contructor () {
 
   }
 
-  // getPlayer1
-  // getPlayer2
+  // getState
 }
 
 const game = new Game()
-const fetcher = new DataFetcher()
+const stateManager = new StateManager()
 
 function drawTime () {
   document.getElementById('timeBox').innerHTML = Math.round(new Date().getTime() / 1000)
