@@ -12,7 +12,7 @@ contract Pong {
 		string teamB;
 	}
 
-	Game[] games;
+	Game[] public games;
 	uint256 latestGame = 0;
 
 	event NewGame(uint256 index, string teamA, string teamB);
