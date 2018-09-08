@@ -12,6 +12,63 @@ body {
   text-align: center;
 }
 
+.btn {
+  background: #19b119;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.text-input-group {
+  padding-bottom: 15px;
+}
+
+.text-input-group .text-input-label {
+  font-size: 13px;
+  color: gray;
+}
+
+.text-input-group input {
+  padding: 5px;
+  font-size: 12px;
+  width: 250px;
+}
+
 .main-content {
   padding: 20px;
+}
+
+.game-list-item {
+  padding-bottom: 5px;
+}
+
+.game-list-item .team-num {
+  width: 35px;
+  display: inline-block;
+  color: gray;
+}
+
+.game-list-item .team-info {
+  display: inline-block;
+  width: 400px;
+}
+
+.game-list-item .team-name {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.game-list-item .team-vs {
+  padding-right: 5px;
+  display: inline-block;
+  color: gray;
+}
+
+.game-list-item .team-join-btn {
+  display: inline-block;
+}
+
+.create-new-game-btn {
+  display: inline-block;
 }

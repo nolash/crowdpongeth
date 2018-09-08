@@ -32,16 +32,6 @@ class App extends Component {
     web3.eth.getAccounts((error, accounts) => {
       if (!error) {
         $this.setState({ account: accounts[0] })
-
-        // someContract.watchEvent(
-        //   'SomeEvent',
-        //   null,
-        //   (event) => {
-        //     this.doSomethingWithEvent()
-        //   },
-        //   console.error
-        // )
-
       } else {
         console.error(error)
       }

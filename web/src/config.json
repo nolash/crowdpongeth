@@ -1,10 +1,12 @@
 {
   "development": {
     "web3Url": "http://localhost:8545",
-    "socketWeb3Url": "ws://localhost:8545"
+    "socketWeb3Url": "ws://localhost:8545",
+    "pongAddress": "0x806a131d7b972715263068de53b7193b751f751c"
   },
   "rinkeby": {
     "web3Url": "https://rinkeby.infura.io",
-    "socketWeb3Url": "wss://rinkeby.infura.io/_ws"
+    "socketWeb3Url": "wss://rinkeby.infura.io/_ws",
+    "pongAddress": ""
   }
 }
