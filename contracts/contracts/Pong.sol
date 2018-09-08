@@ -2,9 +2,13 @@ pragma solidity ^0.4.23;
 
 contract Pong {
 
+	uint256 public JOIN_PERIOD = 60;
+
 	struct Game {
 		address[] participants;
-		mapping (address => string) participants_idx;
+		mapping (address => bool) participant_exists;
+		mapping (address => string) participant_name;
+		mapping (address => uint256) participant_index;
 		uint8 maxScore;
 		uint256 startTimestamp;
 		address owner;
@@ -16,7 +20,7 @@ contract Pong {
 	uint256 latestGame = 0;
 
 	event NewGame(uint256 index, string teamA, string teamB);
-	event NewParticipant(uint256 gameIndex, address user, string name);
+	event NewParticipant(uint256 gameIndex, uint256 participantIndex, address user, string name);
 
 	// creates a new game
 	// sender will be owner
@@ -27,6 +31,7 @@ contract Pong {
 		g.maxScore = maxScore;
 		g.teamA = teamA;
 		g.teamB = teamB;
+		g.startTimestamp = now + JOIN_PERIOD;
 		games.push(g);
 		emit NewGame(latestGame, teamA, teamB);
 		latestGame++;
@@ -34,13 +39,14 @@ contract Pong {
 
 	// joins the sender to the game
 	function joinGame(uint256 gameIndex, address addr, string name) public {
-		require(canJoin(gameIndex));
-		require(!isParticipating(gameIndex, addr));
+		// require(canJoin(gameIndex));
 		bytes memory memoryString = bytes(name);
 		require(memoryString.length > 0);
-		games[gameIndex].participants_idx[addr] = name;
+		games[gameIndex].participant_name[addr] = name;
+		games[gameIndex].participant_exists[addr] = true;
+		games[gameIndex].participant_index[addr] = games[gameIndex].participants.length;
 		games[gameIndex].participants.push(addr);
-		NewParticipant(gameIndex, addr, name);
+		NewParticipant(gameIndex, games[gameIndex].participant_index[addr], addr, name);
 	}
 
 	// game team A name
@@ -66,18 +72,21 @@ contract Pong {
 	// get name of participant at index
 	function getParticipantName(uint256 gameIndex, uint256 idx) public view returns (string) {
 		require(games[gameIndex].participants.length > idx);
-		return games[gameIndex].participants_idx[games[gameIndex].participants[idx]];
+		return games[gameIndex].participant_name[games[gameIndex].participants[idx]];
+	}
+
+	function gameStarted(uint256 gameIndex) public view returns (bool) {
+		return games[gameIndex].startTimestamp < now;
 	}
 
 	// if a new user is currently allowed to join the active game
 	function canJoin(uint256 gameIndex) public view returns (bool) {
-		return !isParticipating(gameIndex, msg.sender) && games[gameIndex].startTimestamp < now;
+		return !isParticipating(gameIndex, msg.sender) && !gameStarted(gameIndex);
 	}
 
 	// check if address is already participating in this game
 	function isParticipating(uint256 gameIndex, address addr) public view returns (bool) {
-		bytes memory memoryString = bytes(games[gameIndex].participants_idx[addr]);
-		return memoryString.length == 0;
+		return games[gameIndex].participant_exists[addr];
 	}
 
 }

@@ -35,6 +35,20 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [],
+    "name": "JOIN_PERIOD",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -62,6 +76,11 @@
       {
         "indexed": false,
         "name": "gameIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "participantIndex",
         "type": "uint256"
       },
       {
@@ -215,6 +234,25 @@
       {
         "name": "",
         "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "gameStarted",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
       }
     ],
     "payable": false,

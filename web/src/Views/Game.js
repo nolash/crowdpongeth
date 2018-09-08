@@ -11,7 +11,8 @@ class Game extends Component {
       teamA: '',
       teamB: '',
       newParticipantName: '',
-      participants: []
+      teamAParticipants: [],
+      teamBParticipants: []
     }
   }
 
@@ -59,12 +60,14 @@ class Game extends Component {
   }
 
   handleNewParticipant (data) {
-    console.log('NEW PARTICIPANT: ', data)
-    let participants = this.state.participants
-    participants.push(data.returnValues)
-    this.setState({
-      participants
-    })
+    if (data.returnValues.gameIndex == this.props.match.params.gameIndex) {
+      const arrayName = parseInt(data.returnValues.participantIndex) % 2 == 0 ? 'teamAParticipants' : 'teamBParticipants'
+      let participants = this.state[arrayName]
+      participants.push(data.returnValues)
+      let newState = {}
+      newState[arrayName] = participants
+      this.setState(newState)
+    }
   }
 
   handleEventErr (err) {
@@ -84,6 +87,23 @@ class Game extends Component {
     console.log('new participant added: ', tx)
   }
 
+  renderParticipantList (listName, i) {
+    return (
+      <div>
+        {
+          this.state[listName].map((participant, i) => {
+            return (
+              <div className="participant-info" key={i}>
+                <div className="participant-name">{participant.name}</div>
+                <div className="participant-addr">{participant.user}</div>
+              </div>
+            )
+          })
+        }
+      </div>
+    )
+  }
+
   render () {
     return (
       <div>
@@ -100,14 +120,10 @@ class Game extends Component {
         </div>
         <div>
           <div className="participants-list">
-            <div>one</div>
-            <div>two</div>
-            <div>three</div>
+            {this.renderParticipantList('teamAParticipants')}
           </div>
           <div className="participants-list">
-            <div>asdfsadf</div>
-            <div>asdf</div>
-            <div>tasdgasdgasdghree</div>
+            {this.renderParticipantList('teamBParticipants')}
           </div>
         </div>
       </div>

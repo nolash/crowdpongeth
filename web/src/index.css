@@ -88,12 +88,23 @@ a {
   display: inline-block;
   font-size: 18px;
   font-weight: bold;
-  width: 300px;
+  width: 500px;
+  margin-bottom: 15px;
 }
 
 .participants-list {
+  vertical-align: top;
   display: inline-block;
-  width: 300px;
+  width: 500px;
+}
+
+.participant-addr {
+  font-size: 11px;
+  color: gray;
+}
+
+.participant-info {
+  margin-bottom: 10px;
 }
 
 .join-game-form input {
