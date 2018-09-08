@@ -1,0 +1,119 @@
+Arguments: 
+  /Users/dozoisch/.nvm/versions/node/v6.8.1/bin/node /Users/dozoisch/.nvm/versions/node/v6.8.1/bin/yarn patch
+
+PATH: 
+  /Users/dozoisch/.rvm/gems/ruby-2.2.6/bin:/Users/dozoisch/.rvm/gems/ruby-2.2.6@global/bin:/Users/dozoisch/.rvm/rubies/ruby-2.2.6/bin:/Users/dozoisch/.nvm/versions/node/v6.8.1/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/heroku/bin:~/Library/Python/2.7/bin:/Users/dozoisch/.rvm/bin:/Users/dozoisch/Library/Android/sdk/tools
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  6.8.1
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "react-google-recaptcha",
+    "version": "0.11.1",
+    "description": "React Component Wrapper for Google reCAPTCHA",
+    "main": "lib/recaptcha-wrapper.js",
+    "module": "lib/es/recaptcha-wrapper.js",
+    "directories": {
+      "lib": "lib/"
+    },
+    "scripts": {
+      "build": "rm -rf lib && npm run build:cjs && npm run build:es",
+      "build:cjs": "babel src --out-dir lib",
+      "build:es": "BABEL_ENV=es babel src --out-dir lib/es",
+      "lint": "eslint ./",
+      "lint:fix": "eslint ./ --fix",
+      "test": "karma start --single-run",
+      "test-watch": "karma start",
+      "patch": "release patch --run",
+      "minor": "release minor --run",
+      "major": "release major --run"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/dozoisch/react-google-recaptcha.git"
+    },
+    "keywords": [
+      "react",
+      "react-component",
+      "captcha",
+      "recaptcha",
+      "google-recaptcha"
+    ],
+    "author": "Hugo Dozois <hugo@dozoisch.com>",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/dozoisch/react-google-recaptcha/issues"
+    },
+    "homepage": "https://github.com/dozoisch/react-google-recaptcha",
+    "peerDependencies": {
+      "react": ">=15.5.0",
+      "react-async-script": ">=0.9.1"
+    },
+    "devDependencies": {
+      "babel-cli": "^6.0.0",
+      "babel-core": "^6.0.0",
+      "babel-eslint": "^7.0.0",
+      "babel-loader": "^6.0.0",
+      "babel-plugin-transform-object-rest-spread": "^6.23.0",
+      "babel-plugin-transform-runtime": "^6.23.0",
+      "babel-preset-es2015": "^6.22.0",
+      "babel-preset-react": "^6.23.0",
+      "babel-register": "^6.23.0",
+      "babel-runtime": "^6.0.0",
+      "chai": "^3.5.0",
+      "es5-shim": "^4.5.0",
+      "eslint": "^3.17.1",
+      "eslint-config-defaults": "^9.0.0",
+      "eslint-plugin-react": "^6.10.0",
+      "karma": "~0.13.9",
+      "karma-chai": "~0.1.0",
+      "karma-chrome-launcher": "~0.2.0",
+      "karma-cli": "~0.1.0",
+      "karma-mocha": "~0.2.0",
+      "karma-mocha-reporter": "~1.1.1",
+      "karma-phantomjs-launcher": "^0.2.1",
+      "karma-sourcemap-loader": "~0.3.5",
+      "karma-webpack": "~1.7.0",
+      "mocha": "~2.3.3",
+      "mt-changelog": "^0.6.2",
+      "phantomjs": "^1.9.18",
+      "react": "^15.5.0",
+      "react-async-script": "^0.9.1",
+      "react-dom": "^15.5.0",
+      "release-script": "^0.5.3",
+      "webpack": "~1.14.0"
+    },
+    "dependencies": {
+      "prop-types": ">=15.5.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c release patch --run
+  Directory: /Users/dozoisch/Documents/react-google-recaptcha
+  Output:
+  
+      at ProcessTermError.Error (native)
+      at ProcessTermError.MessageError (/Users/dozoisch/.nvm/versions/node/v6.8.1/lib/node_modules/yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/Users/dozoisch/.nvm/versions/node/v6.8.1/lib/node_modules/yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/Users/dozoisch/.nvm/versions/node/v6.8.1/lib/node_modules/yarn/lib/cli.js:30281:17)
+      at emitTwo (events.js:106:13)
+      at ChildProcess.emit (events.js:191:7)
+      at maybeClose (internal/child_process.js:877:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
