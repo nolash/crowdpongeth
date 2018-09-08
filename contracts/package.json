@@ -1,0 +1,41 @@
+{
+  "name": "pong-contracts",
+  "version": "0.1.0",
+  "description": "Smart contracts to play pong with friends and family.",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "scripts/test.sh",
+    "testnet": "scripts/run-testnet.sh",
+    "lint": "eslint test",
+    "deploy-local": "./node_modules/.bin/truffle migrate --reset",
+    "deploy-mainnet": "./node_modules/.bin/truffle migrate --network mainnet --reset",
+    "deploy-ropsten": "./node_modules/.bin/truffle migrate --network ropsten --reset",
+    "contract-flattener": "node_modules/.bin/truffle-flattener contracts/Pong.sol > build/Pong_flattened.sol"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^2.0.2",
+    "truffle": "^4.1.14",
+    "truffle-flattener": "^1.2.6",
+    "truffle-hdwallet-provider": "0.0.3",
+    "web3": "^1.0.0-beta.36",
+    "zeppelin-solidity": "^1.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "ganache-cli": "^6.1.8"
+  },
+  "engines": {
+    "node": ">=10.3.0"
+  }
+}
