@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import {mruUpdateDigest} from '../utils';
 import Web3 from 'web3';
 const web3 = new Web3();
+const SWARM_NODE='10.0.6.62:8500';
 
 export default class Home extends React.Component {
 
@@ -67,7 +68,7 @@ export default class Home extends React.Component {
         }
     };
 
-    xhttp.open("POST", `http://localhost:8500/bzz-resource:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`, true);
+    xhttp.open("POST", `http://${SWARM_NODE}/bzz-resource:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`, true);
     xhttp.setRequestHeader("Content-Type","application/octet-stream");
     xhttp.send(dataArray);
 
@@ -82,7 +83,7 @@ export default class Home extends React.Component {
         }
     };
 
-    xhttp.open("GET", `http://localhost:8500/bzz-resource:/?topic=${topic}&user=${owner}`, true);
+    xhttp.open("GET", `http://${SWARM_NODE}:8500/bzz-resource:/?topic=${topic}&user=${owner}`, true);
     xhttp.setRequestHeader('Accept', 'application/octet-stream');
     xhttp.responseType = 'arraybuffer';
     xhttp.send();
