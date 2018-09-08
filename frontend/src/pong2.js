@@ -1,8 +1,9 @@
 class State {
-  constructor () {
+  constructor (timeStamp) {
     this.ball = {}
     this.paddlePlayer1 = {}
     this.paddlePlayer2 = {}
+    this.timeStamp = timeStamp
   }
 
   setBall (ball) {
@@ -32,9 +33,13 @@ class Ball {
     p.fillRect(this.x, this.y, this.width, this.height)
   }
 
-  update () {
+  updatePosition () {
     this.x += this.vx
     this.y += this.vy
+  }
+
+  isMovingRight () {
+    return this.vx > 0
   }
 }
 
@@ -63,6 +68,14 @@ class KeyListener {
 
     document.addEventListener('keydown', this.keydown.bind(this))
     document.addEventListener('keyup', this.keyup.bind(this))
+  }
+
+  isUpPressed () {
+    return this.isPressed(38) === true
+  }
+
+  isDownPressed () {
+    return this.isPressed(40) === true
   }
 
   isPressed (key) {
@@ -111,10 +124,12 @@ class Game {
     // Paddle 1
     this.p1 = new Paddle(5, 0)
     this.p1.y = this.height / 2 - this.p1.height / 2
+    // Display 1
     this.display1 = new Display(this.width / 4, 25)
     // Paddle 2
     this.p2 = new Paddle(this.width - 5 - 2, 0)
     this.p2.y = this.height / 2 - this.p2.height / 2
+    // Display 2
     this.display2 = new Display(this.width * 3 / 4, 25)
     // Ball
     let ballX = this.width / 2
@@ -128,8 +143,8 @@ class Game {
   /// PUBLIC
   draw () {
     drawTime()
-    this.context.clearRect(0, 0, this.width, this.height)
-    this.context.fillRect(this.width / 2, 0, 2, this.height)
+    this.drawPlayField()
+    this.drawMiddleLine()
 
     this.ball.draw(this.context)
 
@@ -137,6 +152,14 @@ class Game {
     this.p2.draw(this.context)
     this.display1.draw(this.context)
     this.display2.draw(this.context)
+  }
+
+  drawMiddleLine () {
+    this.context.fillRect(this.width / 2, 0, 2, this.height)
+  }
+
+  drawPlayField () {
+    this.context.clearRect(0, 0, this.width, this.height)
   }
 
   score (p) {
@@ -157,54 +180,29 @@ class Game {
   }
 
   start () {
-    // based on block heights
     // TODO
+    // based on block heights
   }
 
   update () {
-    this.ball.update()
+    // upate ball
+    this.ball.updatePosition()
+
+    // update Score
     this.display1.value = this.p1.score
     this.display2.value = this.p2.score
 
+    // TODO: We will make this more generic for both players
+    // Commented out player one
     // To which Y direction the paddle is moving
-    if (this.keys.isPressed(83)) { // DOWN
-      this.p1.y = Math.min(this.height - this.p1.height, this.p1.y + 4)
-    } else if (this.keys.isPressed(87)) { // UP
-      this.p1.y = Math.max(0, this.p1.y - 4)
-    }
+    // if (this.keys.isDownPressed())
+    //   this.p1.y = Math.min(this.height - this.p1.height, this.p1.y + 4)
+    // } else if (this.keys.isUpPressed()) { // UP
+    //   this.p1.y = Math.max(0, this.p1.y - 4)
+    // }
 
-    if (this.keys.isPressed(40)) { // DOWN
-      this.p2.y = Math.min(this.height - this.p2.height, this.p2.y + 4)
-    } else if (this.keys.isPressed(38)) { // UP
-      this.p2.y = Math.max(0, this.p2.y - 4)
-    }
+    this.updatePaddles()
 
-    if (this.ball.vx > 0) {
-      if (this.p2.x <= this.ball.x + this.ball.width &&
-        this.p2.x > this.ball.x - this.ball.vx + this.ball.width) {
-        var collisionDiff = this.ball.x + this.ball.width - this.p2.x
-        var k = collisionDiff / this.ball.vx
-        var y = this.ball.vy * k + (this.ball.y - this.ball.vy)
-        if (y >= this.p2.y && y + this.ball.height <= this.p2.y + this.p2.height) {
-          // collides with right paddle
-          this.ball.x = this.p2.x - this.ball.width
-          this.ball.y = Math.floor(this.ball.y - this.ball.vy + this.ball.vy * k)
-          this.ball.vx = -this.ball.vx
-        }
-      }
-    } else {
-      if (this.p1.x + this.p1.width >= this.ball.x) {
-        var collisionDiff = this.p1.x + this.p1.width - this.ball.x
-        var k = collisionDiff / -this.ball.vx
-        var y = this.ball.vy * k + (this.ball.y - this.ball.vy)
-        if (y >= this.p1.y && y + this.ball.height <= this.p1.y + this.p1.height) {
-          // collides with the left paddle
-          this.ball.x = this.p1.x + this.p1.width
-          this.ball.y = Math.floor(this.ball.y - this.ball.vy + this.ball.vy * k)
-          this.ball.vx = -this.ball.vx
-        }
-      }
-    }
 
     // Top and bottom collision
     if ((this.ball.vy < 0 && this.ball.y < 0) ||
@@ -212,6 +210,51 @@ class Game {
       this.ball.vy = -this.ball.vy
     }
 
+    this.updateScore()
+  }
+
+  updatePaddles () {
+    // Trace paddle direction
+    if (this.keys.isDownPressed()) { // DOWN
+      this.p2.y = Math.min(this.height - this.p2.height, this.p2.y + 4)
+    } else if (this.keys.isUpPressed()) { // UP
+      this.p2.y = Math.max(0, this.p2.y - 4)
+    }
+
+    if (this.ball.isMovingRight()) {
+      // P2 collision detection
+      // p2.x behind or at ball && p2.x infront moved ball
+      if (this.p2.x <= this.ball.x + this.ball.width &&
+        this.p2.x > this.ball.x - this.ball.vx + this.ball.width) {
+        var collisionDiff = this.ball.x + this.ball.width - this.p2.x
+        var k = collisionDiff / this.ball.vx
+        var y = this.ball.vy * k + (this.ball.y - this.ball.vy)
+
+        // collides with right paddle
+        if (y >= this.p2.y && y + this.ball.height <= this.p2.y + this.p2.height) {
+          this.ball.x = this.p2.x - this.ball.width
+          this.ball.y = Math.floor(this.ball.y - this.ball.vy + this.ball.vy * k)
+          this.ball.vx = -this.ball.vx
+        }
+      }
+    } else { // ball moves left
+      // P1 collision detection
+      if (this.p1.x + this.p1.width >= this.ball.x) {
+        var collisionDiff = this.p1.x + this.p1.width - this.ball.x
+        var k = collisionDiff / -this.ball.vx
+        var y = this.ball.vy * k + (this.ball.y - this.ball.vy)
+
+        // collides with the left paddle
+        if (y >= this.p1.y && y + this.ball.height <= this.p1.y + this.p1.height) {
+          this.ball.x = this.p1.x + this.p1.width
+          this.ball.y = Math.floor(this.ball.y - this.ball.vy + this.ball.vy * k)
+          this.ball.vx = -this.ball.vx
+        }
+      }
+    }
+  }
+
+  updateScore () {
     if (this.ball.x >= this.width) {
       this.score(this.p1)
     } else if (this.ball.x + this.ball.width <= 0) {
@@ -220,7 +263,18 @@ class Game {
   }
 }
 
+class DataFetcher {
+    // we need swarm and web3 here
+  contructor () {
+
+  }
+
+  // getPlayer1
+  // getPlayer2
+}
+
 const game = new Game()
+const fetcher = new DataFetcher()
 
 function drawTime () {
   document.getElementById('timeBox').innerHTML = Math.round(new Date().getTime() / 1000)
@@ -230,6 +284,7 @@ function MainLoop () {
   // trace and send movement
   // get state
   // set state
+  // all of above should happen in the the update with the DataFetcher
   game.update()
   game.draw()
 
