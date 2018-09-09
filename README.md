@@ -13,6 +13,8 @@ The player area has identical pixel sizes and paddle/ball velocities. Thus, give
 * Up: Q
 * Down: A
 
+You need Metamask and connect to the ropsten network to make it runnable.
+
 ### Team
 
 Jiří Chadima @JirkaChadima
