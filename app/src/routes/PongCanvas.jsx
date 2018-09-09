@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import swarm from '../swarm'
 
 class Ball {
   constructor (x, y, vx, vy) {
@@ -36,7 +37,10 @@ class ValueDisplay {
 }
 
 class KeyListener {
-  constructor () {
+
+  constructor (gameManager) {
+    this.gameManager = gameManager
+    this.lastKeyPressedTime = 0
     this.pressedKeys = []
 
     this.keydown = function (e) {
@@ -45,6 +49,26 @@ class KeyListener {
 
     this.keyup = function (e) {
       this.pressedKeys[e.keyCode] = false
+      const currentTime = Math.floor(new Date().getTime() / 1000)
+      if (currentTime != this.lastKeyPressedTime) {
+        if (e.keyCode == 38 || e.keyCode == 40) {
+          this.lastKeyPressedTime = currentTime
+        }
+        let keyState = 0
+        if (e.keyCode == 38) {
+          keyState = 1
+        } else if (e.keyCode == 40) {
+          keyState = 2
+        }
+        if (this.gameManager.topic && this.gameManager.privateKey && keyState !== 0) {
+          console.log(`Sending: ${keyState}`)
+          swarm.updateResource(
+            this.gameManager.privateKey,
+            this.gameManager.topic,
+            keyState
+          )
+        }
+      }
     }
 
     document.addEventListener('keydown', this.keydown.bind(this))
@@ -97,13 +121,13 @@ class Player {
 }
 
 class Game {
-  constructor () {
+  constructor (gameManager) {
     const canvas = document.getElementById('game')
     this.width = canvas.width
     this.height = canvas.height
     this.context = canvas.getContext('2d')
     this.context.fillStyle = 'white'
-    this.keys = new KeyListener()
+    this.keys = new KeyListener(gameManager)
 
     // display number
     this.display1 = new ValueDisplay(this.width / 4, 25)
@@ -338,15 +362,37 @@ class StateManager {
 
 class GameManager {
   constructor () {
-    this.game = new Game()
+    this.game = new Game(this)
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
   }
 
-  loop () {
+  setTopic (topic) {
+    if (!this.topic) {
+      this.topic = topic
+    }
+  }
+
+  setPrivateKey (privateKey) {
+    if (!this.privateKey) {
+      this.privateKey = privateKey
+    }
+  }
+
+  dataUpdateLoop () {
     let direction = this.game.getDirection()
-    console.log(direction)
-    this.stateManager.sendMove(direction)
+    const currentTime = Math.floor(new Date().getTime() / 1000)
+    if (direction == 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
+      if (this.topic && this.privateKey) {
+        console.log('Sending: 0')
+        swarm.updateResource(this.privateKey, this.topic, 0)
+      }
+    }
+  }
+
+  loop () {
+    // let direction = this.game.getDirection()
+    // this.stateManager.sendMove(direction)
     this.state = this.stateManager.getState()
     this.game.setNextMove(this.state.playerNumber1, this.state.direction1, this.state.velocity1)
     this.game.setNextMove(this.state.playerNumber2, this.state.direction2, this.state.velocity2)
@@ -356,20 +402,26 @@ class GameManager {
 
   start () {
     window.setInterval(() => { this.loop() }, 100)
-    // setTimeout(() => this.start(), 100)
+    window.setInterval(() => { this.dataUpdateLoop() }, 1000)
   }
 }
 
 class Pong extends Component {
 
+  constructor(props) {
+    super(props)
+  }
+
   componentDidMount () {
-    console.log('STARTING THE GAME')
-    // console.log(this.refs.game)
-    const gameManager = new GameManager()
-    gameManager.start()
+    this.gameManager = new GameManager()
+    this.gameManager.start()
   }
 
   render () {
+    if (this.gameManager) {
+      this.gameManager.setTopic(this.props.topic)
+      this.gameManager.setPrivateKey(this.props.privateKey)
+    }
     return (
       <div>
         <h3>PONG GAME</h3>
