@@ -419,6 +419,7 @@ class Pong extends Component {
 
   render () {
     if (this.gameManager) {
+      console.log('Particiaptns list: ', this.props.teamAParticipants)
       this.gameManager.setTopic(this.props.topic)
       this.gameManager.setPrivateKey(this.props.privateKey)
     }

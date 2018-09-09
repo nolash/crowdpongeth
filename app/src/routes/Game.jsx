@@ -139,7 +139,11 @@ class Game extends Component {
           </div>
         </div>
 
-        <PongCanvas topic={this.state.topic} privateKey={this.state.privateKey} />
+        <PongCanvas 
+          topic={this.state.topic}
+          privateKey={this.state.privateKey}
+          teamAParticipants={this.state.teamAParticipants}
+          teamBParticipants={this.state.teamBParticipants}/> />
       </div>
     )
   }

@@ -85,6 +85,14 @@ async function updateResource (privateKey, topic, state) {
 
 }
 
+async function getResource (topic, owner) {
+  sendRequest(`/bzz-resource:/?topic=${topic}&user=${owner}&hint.level=0`,
+  'GET', 'arraybuffer', null).then(function(result){
+    console.log('Get successful', result);
+  });
+}
+
 export default {
-  updateResource
+  updateResource,
+  getResource
 }
