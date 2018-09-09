@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.main-header {
+  margin: 0;
+  padding: 20px;
+  color: white;
+  background: #217f92;
+  text-align: center;
+}
+
+input {
+  padding: 5px;
+  font-size: 12px;
+  width: 250px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn {
+  background: #19b119;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.lnk {
+  color: blue;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.text-input-group {
+  padding-bottom: 15px;
+}
+
+.text-input-group .text-input-label {
+  font-size: 13px;
+  color: gray;
+}
+
+.main-content {
+  padding: 20px;
+}
+
+.game-list-item {
+  padding-bottom: 15px;
+}
+
+.game-list-item .team-num {
+  width: 35px;
+  display: inline-block;
+  color: gray;
+}
+
+.game-list-item .team-info {
+  display: inline-block;
+  width: 400px;
+}
+
+.game-list-item .team-name {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.game-list-item .team-vs {
+  padding-right: 5px;
+  display: inline-block;
+  color: gray;
+}
+
+.game-list-item .team-join-btn {
+  display: inline-block;
+}
+
+.create-new-game-btn {
+  display: inline-block;
+}
+
+.participant-list-title {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  width: 500px;
+  margin-bottom: 15px;
+}
+
+.participants-list {
+  vertical-align: top;
+  display: inline-block;
+  width: 500px;
+}
+
+.participant-addr {
+  font-size: 11px;
+  color: gray;
+}
+
+.participant-info {
+  margin-bottom: 10px;
+}
+
+.join-game-form input {
+  margin-right: 10px;
+}
