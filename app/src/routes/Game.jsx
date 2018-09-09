@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import web3 from '../eth/web3'
 import Pong from '../web3Contracts/Pong'
+import PongCanvas from './PongCanvas'
 
 class Game extends Component {
 
@@ -12,6 +13,7 @@ class Game extends Component {
       privateKey: '',
       teamA: '',
       teamB: '',
+      topic: '',
       newParticipantName: '',
       teamAParticipants: [],
       teamBParticipants: []
@@ -38,7 +40,8 @@ class Game extends Component {
     const game = await Pong.contract.methods.games(this.props.match.params.gameIndex).call()
     this.setState({
       teamA: game.teamA,
-      teamB: game.teamB
+      teamB: game.teamB,
+      topic: game.topic
     })
   }
 
@@ -82,10 +85,12 @@ class Game extends Component {
 
   async handleJoinGameClicked () {
     const acct = web3.eth.accounts.create()
+
     this.setState({
       publicAddress: acct.address,
       privateKey: acct.privateKey
     })
+
     const tx = await Pong.contract.methods.joinGame(
       this.props.match.params.gameIndex,
       acct.address,
@@ -133,6 +138,10 @@ class Game extends Component {
             {this.renderParticipantList('teamBParticipants')}
           </div>
         </div>
+
+        <br /><br />
+
+        <PongCanvas topic={this.state.topic} privateKey={this.state.privateKey} />
       </div>
     )
   }

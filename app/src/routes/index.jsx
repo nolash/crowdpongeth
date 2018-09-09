@@ -10,7 +10,7 @@ import Game from "./Game";
 import Games from "./Games";
 import NewGame from "./NewGame";
 import Swarm from "./Swarm";
-import Pong from "./Pong";
+import PongCanvas from "./PongCanvas";
 
 const Routes = () => (
   <div>
@@ -25,7 +25,7 @@ const Routes = () => (
           <Route exact path="/new-game" component={NewGame}/>
           <Route exact path="/game/:gameIndex" component={Game}/>
           <Route path="/swarm" component={Swarm} />
-          <Route path="/pong" component={Pong} />
+          <Route path="/pong" component={PongCanvas} />
         </Switch>
       </HashRouter>
     </div>
