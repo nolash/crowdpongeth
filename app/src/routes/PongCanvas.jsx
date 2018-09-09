@@ -379,6 +379,18 @@ class GameManager {
     }
   }
 
+  setTeamAParticipants (teamAParticipants) {
+    if (!this.teamAParticipants) {
+      this.teamAParticipants = teamAParticipants
+    }
+  }
+
+  setTeamBParticipants (teamBParticipants) {
+    if (!this.teamBParticipants) {
+      this.teamBParticipants = teamBParticipants
+    }
+  }
+
   dataUpdateLoop () {
     let direction = this.game.getDirection()
     const currentTime = Math.floor(new Date().getTime() / 1000)
@@ -388,6 +400,29 @@ class GameManager {
         swarm.updateResource(this.privateKey, this.topic, 0)
       }
     }
+  }
+
+  handleTeamAData (result) {
+    console.log('Team A Input: ', result)
+  }
+
+  handleTeamBData (result) {
+    console.log('Team B Input: ', result)
+  }
+
+  getDataForParticipants (participantsList, team) {
+    for (var i in participantsList) {
+      const participant = participantsList[i]
+      swarm.getResource(
+        this.topic,
+        participant.user
+      ).then(this[`handleTeam${team}Data`].bind(this))
+    }
+  }
+
+  dataGetLoop () {
+    this.getDataForParticipants(this.teamAParticipants, 'A')
+    this.getDataForParticipants(this.teamBParticipants, 'B')
   }
 
   loop () {
@@ -403,6 +438,7 @@ class GameManager {
   start () {
     window.setInterval(() => { this.loop() }, 100)
     window.setInterval(() => { this.dataUpdateLoop() }, 1000)
+    window.setInterval(() => { this.dataGetLoop() }, 1000)
   }
 }
 
@@ -419,9 +455,10 @@ class Pong extends Component {
 
   render () {
     if (this.gameManager) {
-      console.log('Particiaptns list: ', this.props.teamAParticipants)
       this.gameManager.setTopic(this.props.topic)
       this.gameManager.setPrivateKey(this.props.privateKey)
+      this.gameManager.setTeamAParticipants(this.props.teamAParticipants)
+      this.gameManager.setTeamBParticipants(this.props.teamBParticipants)
     }
     return (
       <div>

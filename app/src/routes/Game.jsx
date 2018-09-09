@@ -37,6 +37,7 @@ class Game extends Component {
   }
 
   async fetchGameInfo () {
+    console.log('FETCH GAME: ', game)
     const game = await Pong.contract.methods.games(this.props.match.params.gameIndex).call()
     this.setState({
       teamA: game.teamA,
