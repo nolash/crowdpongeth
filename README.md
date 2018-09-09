@@ -33,4 +33,6 @@ http://swarm-gateways.net/bzz:/theswarm.eth
 
 ### MRU
 
+Special thanks to Javier Peletier @jpeletier for the excellent enhancements on the MRU project.
+
 https://github.com/ethersphere/go-ethereum/pull/881
