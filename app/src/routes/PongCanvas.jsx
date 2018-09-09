@@ -123,7 +123,7 @@ class Game {
     this.maxScore = gameManager.maxScore
     this.context = canvas.getContext('2d')
     this.context.fillStyle = 'white'
-    this.keys = new KeyListener(gameManager)
+    //this.keys = new KeyListener(gameManager)
 
     // display number
     this.display1 = new ValueDisplay(this.width / 4, 25)
@@ -225,7 +225,7 @@ class Game {
 
   setNextMove (playerNumber, direction, velocity) {
     let player = playerNumber === 1 ? this.p1 : this.p2
-
+    console.log('setnextmove', playerNumber, direction, velocity)
     if (direction === 'DOWN') { // DOWN
       player.paddle.y = Math.min(this.height - player.paddle.height, player.paddle.y + velocity*6)
     } else if (direction === 'UP') { // UP
@@ -380,7 +380,7 @@ class GameManager {
     this.game = new Game(this)
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
-    this.teamVotes = 0;
+    this.teamVotes = {};
     this.teamADelta =0;
     this.teamBDelta =0;
   }
@@ -432,15 +432,12 @@ class GameManager {
           this.teamADelta --;
         }
       }
-      this.teamVotes++;
-      console.log('teamvotes.getDirection', this.teamVotes, team, result);
-      if (this.teamVotes == 2) {
-        console.log('this.game.getDirection(this.teamADelta)', this.game.getDirection(this.teamADelta), this.teamADelta)
-
-      	this.game.setNextMove(this.state.playerNumber1, this.game.getDirection(this.teamADelta), this.teamADelta);
-      	this.game.setNextMove(this.state.playerNumber2, this.game.getDirection(this.teamBDelta), this.teamBDelta);
+      this.teamVotes.a = 1;
+      if (this.teamVotes.a && this.teamVotes.b) {
+      	this.game.setNextMove(this.state.playerNumber1, this.stateManager.getDirection(this.teamADelta), this.teamADelta);
+      	this.game.setNextMove(this.state.playerNumber2, this.stateManager.getDirection(this.teamBDelta), this.teamBDelta);
       	this.game.paddleSerial+=10;
-      	this.teamVotes = 0;
+      	this.teamVotes = {};
       	this.teamADelta = 0;
         this.teamBDelta = 0;
       }
@@ -452,12 +449,12 @@ class GameManager {
           this.teamBDelta --;
         }
       }
-      this.teamVotes++;
-      if (this.teamVotes == 2) {
-      	this.game.setNextMove(this.state.playerNumber1, this.game.getDirection(this.teamADelta), this.teamADelta);
-      	this.game.setNextMove(this.state.playerNumber2, this.game.getDirection(this.teamBDelta), this.teamBDelta);
+      this.teamVotes.b = 1;
+      if (this.teamVotes.a && this.teamVotes.b) {
+      	this.game.setNextMove(this.state.playerNumber1, this.stateManager.getDirection(this.teamADelta), this.teamADelta);
+      	this.game.setNextMove(this.state.playerNumber2, this.stateManager.getDirection(this.teamBDelta), this.teamBDelta);
       	this.game.paddleSerial+=10;
-      	this.teamVotes = 0;
+      	this.teamVotes = {};
         this.teamADelta = 0;
         this.teamBDelta = 0;
       }
@@ -465,11 +462,16 @@ class GameManager {
   }
 
   getDataForParticipants (participantsList, team) {
+    var topic = this.topic;
     var self = this;
     return Promise.all(participantsList.map((p) =>{
-      console.log(p);
-      return swarm.getResource(self.topic, p.user)
-    })).then(this.handleTeamData.bind(this, team))
+      //console.log(p);
+      return swarm.getResource(topic, p.user)
+    })).then((result) => {
+      this.handleTeamData(team, result);
+    }).catch((e) => {
+      //console.log('err', e, team, participantsList.length);
+    })
   }
 
   loop () {
