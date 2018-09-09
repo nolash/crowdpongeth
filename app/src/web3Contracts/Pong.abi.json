@@ -28,6 +28,10 @@
       {
         "name": "teamB",
         "type": "string"
+      },
+      {
+        "name": "topic",
+        "type": "bytes32"
       }
     ],
     "payable": false,
@@ -65,6 +69,11 @@
         "indexed": false,
         "name": "teamB",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "topic",
+        "type": "bytes32"
       }
     ],
     "name": "NewGame",
@@ -111,6 +120,10 @@
       {
         "name": "teamB",
         "type": "string"
+      },
+      {
+        "name": "topic",
+        "type": "bytes32"
       }
     ],
     "name": "newGame",
