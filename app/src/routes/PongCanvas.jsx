@@ -54,14 +54,13 @@ class KeyListener {
       this.pressedKeys[e.keyCode] = false
       const currentTime = Math.floor(new Date().getTime() / 1000)
       if (currentTime != this.lastKeyPressedTime) {
-        console.log(e.keyCode);
-        if (e.keyCode == keyUpCode || e.keyCode == keyUpCode) {
+        if (e.keyCode == keyUpCode || e.keyCode == keyDownCode) {
           this.lastKeyPressedTime = currentTime
         }
         let keyState = 0
         if (e.keyCode == keyUpCode) {
           keyState = 1
-        } else if (e.keyCode == keyUpCode) {
+        } else if (e.keyCode == keyDownCode) {
           keyState = 2
         }
         if (this.gameManager.topic && this.gameManager.privateKey && keyState !== 0) {
@@ -405,6 +404,8 @@ class GameManager {
         swarm.updateResource(this.privateKey, this.topic, 0)
       }
     }
+    this.getDataForParticipants(this.teamAParticipants, 'A')
+    this.getDataForParticipants(this.teamBParticipants, 'B')
   }
 
   handleTeamAData (result) {
@@ -416,18 +417,11 @@ class GameManager {
   }
 
   getDataForParticipants (participantsList, team) {
-    for (var i in participantsList) {
-      const participant = participantsList[i]
-      swarm.getResource(
-        this.topic,
-        participant.user
-      ).then(this[`handleTeam${team}Data`].bind(this))
-    }
-  }
-
-  dataGetLoop () {
-    this.getDataForParticipants(this.teamAParticipants, 'A')
-    this.getDataForParticipants(this.teamBParticipants, 'B')
+    var self = this;
+    return Promise.all(participantsList.map((p) =>{
+      console.log(p);
+      return swarm.getResource(self.topic, p.user)
+    })).then(this[`handleTeam${team}Data`].bind(this))
   }
 
   loop () {
@@ -443,8 +437,7 @@ class GameManager {
   start () {
     console.log('started')
     window.setInterval(() => { this.loop() }, 100)
-    window.setInterval(() => { this.dataUpdateLoop() }, 1000)
-    window.setInterval(() => { this.dataGetLoop() }, 1000)
+    window.setInterval(() => { this.dataUpdateLoop() }, 2000)
   }
 }
 
@@ -465,7 +458,8 @@ class Pong extends Component {
 
   render () {
     if (this.gameManager) {
-      console.log('Participants list: ', this.props.teamAParticipants)
+      console.log('Participants A list: ', this.props.teamAParticipants)
+      console.log('Participants B list: ', this.props.teamBParticipants)
       this.gameManager.setTopic(this.props.topic)
       this.gameManager.setPrivateKey(this.props.privateKey)
       this.gameManager.setTeamAParticipants(this.props.teamAParticipants)
