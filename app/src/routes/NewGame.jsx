@@ -73,7 +73,7 @@ class NewGame extends Component {
   }
 
   async handleCreateNewGame () {
-    const topic = web3.utils.randomHex(32)
+    const topic = web3.utils.randomHex()
     const tx = await Pong.contract.methods.newGame(
       this.state.maxScore,
       this.state.teamA,
