@@ -5,7 +5,7 @@ const devServer = {
   port: 3000,
   contentBase: join(__dirname, '..', 'public'),
   hot: true,
-  historyApiFallback: true,
+  historyApiFallback: false,
   inline: true,
   noInfo: false,
   headers: { 'Access-Control-Allow-Origin': '*' },

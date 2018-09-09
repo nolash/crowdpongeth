@@ -2,7 +2,9 @@ import React, {Fragment} from 'react';
 import {mruUpdateDigest} from '../utils';
 import Web3 from 'web3';
 const web3 = new Web3();
-const SWARM_NODE='10.0.6.62:8500';
+const SWARM_NODE='http://37.157.197.161:8500';
+// const SWARM_NODE='http://10.0.7.72:8500';
+// const SWARM_NODE='http://localhost:8500';
 
 export default class Home extends React.Component {
 
@@ -47,8 +49,6 @@ export default class Home extends React.Component {
     console.log(sigObj.signature.toString('hex'), sigObj.recovery)
     const signature = '0x'+sigObj.signature.toString('hex')+"0"+sigObj.recovery.toString();
 
-    // console.log('Signer recovered before sending',web3.eth.accounts.recover(dataToSign, signature));
-
     console.log('Signature', signature);
 
     const newDataBytes = dataToBuffer(data);
@@ -68,8 +68,9 @@ export default class Home extends React.Component {
         }
     };
 
-    xhttp.open("POST", `http://${SWARM_NODE}/bzz-resource:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`, true);
+    xhttp.open("POST", `${SWARM_NODE}/bzz-resource:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`, true);
     xhttp.setRequestHeader("Content-Type","application/octet-stream");
+    xhttp.setRequestHeader('Access-Control-Allow-Method', 'POST');
     xhttp.send(dataArray);
 
   }
@@ -83,8 +84,9 @@ export default class Home extends React.Component {
         }
     };
 
-    xhttp.open("GET", `http://${SWARM_NODE}:8500/bzz-resource:/?topic=${topic}&user=${owner}`, true);
+    xhttp.open("GET", `${SWARM_NODE}/bzz-resource:/?topic=${topic}&user=${owner}`, true);
     xhttp.setRequestHeader('Accept', 'application/octet-stream');
+    xhttp.setRequestHeader('Access-Control-Allow-Method', 'GET');
     xhttp.responseType = 'arraybuffer';
     xhttp.send();
 
@@ -108,7 +110,7 @@ export default class Home extends React.Component {
         <h1>TEST APP</h1>
         <a onClick={() => this.updateResource(
           '0x7c382355f1c699e92b40cf179db10bdc914c24b4d9f8ff8f88c2bb5b154841bc',
-          '0xa752d6763b130d97158c365a91102f185fe1571b154b1c75958bada8ccd98eee', 0
+          '0xa752d6763b130d97158c365a91102f185fe1571b154b1c75958bada8ccd98eee', 2
         )}>UPDATE</a>
         <br></br>
         <a onClick={() => this.getResource(

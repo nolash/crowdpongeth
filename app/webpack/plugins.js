@@ -25,7 +25,7 @@ const cleanOptions = {
 };
 
 const plugins = [
-  new webpack.EnvironmentPlugin(['NODE_ENV','ETH_NET']),
+  new webpack.EnvironmentPlugin(['NODE_ENV']),
   new CleanWebpackPlugin(pathsToClean, cleanOptions),
   new webpack.NamedModulesPlugin(),
 ];
