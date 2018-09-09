@@ -8,7 +8,6 @@ const levelLength = 1;
 const updateMinLength = topicLength + userLength + timeLength + levelLength;
 
 function mruUpdateDigest(o) {
-  console.log(o)
   var topicBytes = undefined;
   var dataBytes = undefined;
   var userBytes = undefined;
