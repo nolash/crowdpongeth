@@ -50,14 +50,30 @@ class Games extends Component {
   }
 
   render () {
+
+    setInterval(function() {
+      var kitties = document.getElementsByClassName('gifCat');
+      if (kitties[1].style.display == 'none') {
+        kitties[0].style.display = 'none';
+        kitties[1].style.display = '';
+      } else {
+        kitties[1].style.display = 'none';
+        kitties[0].style.display = '';
+      }
+    }, 400);
+
     return (
-      <div>
-        <NavLink to="/new-game" className="btn">New Game</NavLink>
-        <br /><br />
-        <br /><br />
-        <div>Games:</div>
-        <br />
-        <GameList games={this.state.games} />
+      <div className="row">
+        <div className="col-md-3"><img className="gifCat" src="https://media0.giphy.com/media/vcYJ10AVGFZbG/giphy.gif"/></div>
+        <div className="col-md-6">
+          <NavLink to="/new-game" className="btn">New Game</NavLink>
+          <br /><br />
+          <br /><br />
+          <div>Games:</div>
+          <br />
+          <GameList games={this.state.games} />
+        </div>
+        <div className="col-md-3"><img className="gifCat" src="https://media0.giphy.com/media/vcYJ10AVGFZbG/giphy.gif"/></div>
       </div>
     )
   }

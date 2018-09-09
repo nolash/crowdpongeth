@@ -85,26 +85,43 @@ class NewGame extends Component {
   }
 
   render () {
+
+    setInterval(function() {
+      var kitties = document.getElementsByClassName('gifCat');
+      if (kitties[1].style.display == 'none') {
+        kitties[0].style.display = 'none';
+        kitties[1].style.display = '';
+      } else {
+        kitties[1].style.display = 'none';
+        kitties[0].style.display = '';
+      }
+    }, 600);
+
     return (
-      <div>
-        <div className="text-input-group">
-          <div className="text-input-label">Max score:</div>
-          <input value={this.state.maxScore} onChange={this.handleMaxScoreChanged.bind(this)} />
-        </div>
+      <div className="row">
+        <div className="col-md-3"><img className="gifCat" src="https://media0.giphy.com/media/vcYJ10AVGFZbG/giphy.gif"/></div>
+        <div className="col-md-6">
 
-        <div className="text-input-group">
-          <div className="text-input-label">Team A:</div>
-          <input value={this.state.teamA} onChange={this.handleTeamAChanged.bind(this)} />
-        </div>
+          <div className="text-input-group">
+            <div className="text-input-label">Max score:</div>
+            <input value={this.state.maxScore} onChange={this.handleMaxScoreChanged.bind(this)} />
+          </div>
 
-        <div className="text-input-group">
-          <div className="text-input-label">Team B:</div>
-          <input value={this.state.teamB} onChange={this.handleTeamBChanged.bind(this)} />
-        </div>
+          <div className="text-input-group">
+            <div className="text-input-label">Team A:</div>
+            <input value={this.state.teamA} onChange={this.handleTeamAChanged.bind(this)} />
+          </div>
 
-        <div className="btn create-new-game-btn" onClick={this.handleCreateNewGame.bind(this)}>
-          Create new game
+          <div className="text-input-group">
+            <div className="text-input-label">Team B:</div>
+            <input value={this.state.teamB} onChange={this.handleTeamBChanged.bind(this)} />
+          </div>
+
+          <div className="btn create-new-game-btn" onClick={this.handleCreateNewGame.bind(this)}>
+            Create new game
+          </div>
         </div>
+        <div className="col-md-3"><img className="gifCat" src="https://media0.giphy.com/media/vcYJ10AVGFZbG/giphy.gif"/></div>
       </div>
     )
   }

@@ -114,3 +114,7 @@ a {
 .join-game-form input {
   margin-right: 10px;
 }
+
+.gifCat {
+  max-width: 300px;
+}

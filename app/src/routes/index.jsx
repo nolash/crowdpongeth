@@ -1,9 +1,10 @@
 import React from 'react';
 import 'jquery';
 import 'popper.js';
+import 'bootstrap/dist/css/bootstrap.min';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../index.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { hot } from "react-hot-loader";
 import Game from "./Game";
 import Games from "./Games";
@@ -15,9 +16,10 @@ const Routes = () => (
   <div>
     <div className="main-header">
       <h1>[[-- Crowd Pong --]]</h1>
+
     </div>
     <div className="main-content">
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
           <Route exact path="/" component={Games}/>
           <Route exact path="/new-game" component={NewGame}/>
@@ -25,7 +27,7 @@ const Routes = () => (
           <Route path="/swarm" component={Swarm} />
           <Route path="/pong" component={Pong} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   </div>
 );
