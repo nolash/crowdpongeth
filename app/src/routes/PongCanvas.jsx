@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import swarm from '../swarm'
 
+const keyUpCode = 104;
+const keyDownCode = 98;
+
 class Ball {
   constructor (x, y, vx, vy) {
     this.x = x
@@ -51,13 +54,14 @@ class KeyListener {
       this.pressedKeys[e.keyCode] = false
       const currentTime = Math.floor(new Date().getTime() / 1000)
       if (currentTime != this.lastKeyPressedTime) {
-        if (e.keyCode == 38 || e.keyCode == 40) {
+        console.log(e.keyCode);
+        if (e.keyCode == keyUpCode || e.keyCode == keyUpCode) {
           this.lastKeyPressedTime = currentTime
         }
         let keyState = 0
-        if (e.keyCode == 38) {
+        if (e.keyCode == keyUpCode) {
           keyState = 1
-        } else if (e.keyCode == 40) {
+        } else if (e.keyCode == keyUpCode) {
           keyState = 2
         }
         if (this.gameManager.topic && this.gameManager.privateKey && keyState !== 0) {
@@ -76,11 +80,11 @@ class KeyListener {
   }
 
   isUpPressed () {
-    return this.isPressed(38) === true
+    return this.isPressed(keyUpCode) === true
   }
 
   isDownPressed () {
-    return this.isPressed(40) === true
+    return this.isPressed(keyUpCode) === true
   }
 
   isPressed (key) {
@@ -361,8 +365,9 @@ class StateManager {
 }
 
 class GameManager {
-  constructor () {
+  constructor (startTime) {
     this.game = new Game(this)
+    this.startTime = startTime;
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
   }
@@ -401,6 +406,7 @@ class GameManager {
   }
 
   start () {
+    console.log('started')
     window.setInterval(() => { this.loop() }, 100)
     window.setInterval(() => { this.dataUpdateLoop() }, 1000)
   }
@@ -413,13 +419,17 @@ class Pong extends Component {
   }
 
   componentDidMount () {
-    this.gameManager = new GameManager()
-    this.gameManager.start()
+    this.gameManager = new GameManager(this.props.startTime)
+    var eta_ms = this.gameManager.startTime*1000 - Date.now();
+    if (eta_ms > 0)
+      window.setTimeout(() => this.gameManager.start(), eta_ms);
+    else
+      this.gameManager.start();
   }
 
   render () {
     if (this.gameManager) {
-      console.log('Particiaptns list: ', this.props.teamAParticipants)
+      console.log('Participants list: ', this.props.teamAParticipants)
       this.gameManager.setTopic(this.props.topic)
       this.gameManager.setPrivateKey(this.props.privateKey)
     }

@@ -60,7 +60,7 @@ contract Pong {
 	}
 
 	// start block of game
-	function getStartBlock(uint256 gameIndex) public view returns (uint256) {
+	function getStartTime(uint256 gameIndex) public view returns (uint256) {
 		return games[gameIndex].startTimestamp;
 	}
 

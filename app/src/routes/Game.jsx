@@ -14,6 +14,7 @@ class Game extends Component {
       teamA: '',
       teamB: '',
       topic: '',
+      startTime: '',
       newParticipantName: '',
       teamAParticipants: [],
       teamBParticipants: []
@@ -41,7 +42,8 @@ class Game extends Component {
     this.setState({
       teamA: game.teamA,
       teamB: game.teamB,
-      topic: game.topic
+      topic: game.topic,
+      startTime: game.startTimestamp
     })
   }
 
@@ -139,11 +141,13 @@ class Game extends Component {
           </div>
         </div>
 
-        <PongCanvas 
+        <PongCanvas
           topic={this.state.topic}
           privateKey={this.state.privateKey}
           teamAParticipants={this.state.teamAParticipants}
-          teamBParticipants={this.state.teamBParticipants}/> />
+          teamBParticipants={this.state.teamBParticipants}
+          startTime={this.state.startTime}
+        />
       </div>
     )
   }
