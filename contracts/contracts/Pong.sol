@@ -2,8 +2,6 @@ pragma solidity ^0.4.23;
 
 contract Pong {
 
-	uint256 public JOIN_PERIOD = 60;
-
 	struct Game {
 		address[] participants;
 		mapping (address => bool) participant_exists;
@@ -26,14 +24,14 @@ contract Pong {
 	// creates a new game
 	// sender will be owner
 	// sender names the teams
-	function newGame(uint8 maxScore, string teamA, string teamB, bytes32 topic) public {
+	function newGame(uint8 maxScore, string teamA, string teamB, bytes32 topic, uint256 startInSeconds) public {
 		Game memory g;
 		g.owner = msg.sender;
 		g.maxScore = maxScore;
 		g.teamA = teamA;
 		g.teamB = teamB;
 		g.topic = topic;
-		g.startTimestamp = now + JOIN_PERIOD;
+		g.startTimestamp = now + startInSeconds;
 		games.push(g);
 		emit NewGame(latestGame, teamA, teamB, topic);
 		latestGame++;

@@ -10,7 +10,9 @@ class NewGame extends Component {
       account: '',
       maxScore: 100,
       teamA: '',
-      teamB: ''
+      teamB: '',
+      matchName: '',
+      startMinutes: 5
     }
   }
 
@@ -76,12 +78,22 @@ class NewGame extends Component {
     this.setState({ teamB: e.target.value })
   }
 
+  handleStartTimeChanged (e) {
+    this.setState({ startMinutes: e.target.value })
+  }
+
   async handleCreateNewGame () {
+    console.log(  this.state.maxScore,
+      this.state.teamA,
+      this.state.teamB,
+      web3.utils.sha3(this.state.matchName),
+      parseInt(this.state.startMinutes)*60)
     const tx = await Pong.contract.methods.newGame(
       this.state.maxScore,
       this.state.teamA,
       this.state.teamB,
-      web3.utils.sha3(this.state.matchName)
+      web3.utils.sha3(this.state.matchName),
+      parseInt(this.state.startMinutes)*60
     ).send({ from: this.state.account })
     console.log('new game created: ', tx)
     this.props.history.push('/')
@@ -123,6 +135,11 @@ class NewGame extends Component {
           <div className="text-input-group">
             <div className="text-input-label">Team B:</div>
             <input value={this.state.teamB} onChange={this.handleTeamBChanged.bind(this)} />
+          </div>
+
+          <div className="text-input-group">
+            <div className="text-input-label">Start Minutes:</div>
+            <input value={this.state.startMinutes} onChange={this.handleStartTimeChanged.bind(this)} />
           </div>
 
           <div className="btn create-new-game-btn" onClick={this.handleCreateNewGame.bind(this)}>

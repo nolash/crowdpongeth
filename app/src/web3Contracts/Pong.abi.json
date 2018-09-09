@@ -39,20 +39,6 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "JOIN_PERIOD",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
@@ -124,6 +110,10 @@
       {
         "name": "topic",
         "type": "bytes32"
+      },
+      {
+        "name": "startInSeconds",
+        "type": "uint256"
       }
     ],
     "name": "newGame",

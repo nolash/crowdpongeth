@@ -12,6 +12,6 @@
   "ropsten": {
     "web3Url": "https://ropsten.infura.io",
     "socketWeb3Url": "wss://ropsten.infura.io/_ws",
-    "pongAddress": "0x007c09a13cAb3F4A91F5a072A87dF3D5958F8727"
+    "pongAddress": "0x957a63a9c458c5c40b84e558a7d0b279871be622"
   }
 }
