@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import swarm from '../swarm'
 
-const keyUpCode = 104;
-const keyDownCode = 98;
+const keyUpCode = 65;
+const keyDownCode = 81;
 
 class Ball {
   constructor (x, y, vx, vy) {
@@ -105,7 +105,7 @@ class Paddle {
     this.y = y
     this.players = players // [] //TODO: Do we really need that
     this.width = 2
-    this.height = 28
+    this.height = 40
     this.score = 0
   }
 
@@ -128,6 +128,7 @@ class Game {
     const canvas = document.getElementById('game')
     this.width = canvas.width
     this.height = canvas.height
+    this.maxScore = gameManager.maxScore
     this.context = canvas.getContext('2d')
     this.context.fillStyle = 'white'
     this.keys = new KeyListener(gameManager)
@@ -234,9 +235,9 @@ class Game {
     let player = playerNumber === 1 ? this.p1 : this.p2
 
     if (direction === 'DOWN') { // DOWN
-      player.paddle.y = Math.min(this.height - player.paddle.height, player.paddle.y + velocity)
+      player.paddle.y = Math.min(this.height - player.paddle.height, player.paddle.y + velocity*6)
     } else if (direction === 'UP') { // UP
-      player.paddle.y = Math.max(0, player.paddle.y - velocity)
+      player.paddle.y = Math.max(0, player.paddle.y - velocity*6)
     }
   }
 
@@ -255,9 +256,9 @@ class Game {
 
   updateBallMovement () {
     // ball can't move beyond the one second MRU resolution, lest we miss where the paddles are
-    if (this.ballSerial - this.paddleSerial == 10) {
-	return;
-    }
+    // if ((this.ballSerial - this.paddleSerial == 10)) {
+	  //   return;
+    // }
     if (this.ball.isMovingRight()) {
       // P2 collision detection
       // p2.x behind or at ball && p2.x infront moved ball
@@ -306,11 +307,9 @@ class Game {
     } else if (this.ball.x + this.ball.width <= 0) {
       this.score(this.p2)
     }
-    if (this.score(this.p1) == this.maxScore) {
-       console.log(this.teamA + " wins");
+    if (this.p1.score == this.maxScore) {
        this.won = 1;
-    } else if (this.score(this.p2) == this.maxScore) {
-       console.log(this.teamB + " wins");
+    } else if (this.p2.score == this.maxScore) {
        this.won = 2;
     }
   }
@@ -384,12 +383,14 @@ class StateManager {
 }
 
 class GameManager {
-  constructor (startTime) {
-    this.game = new Game(this)
+  constructor (startTime, maxScore) {
+    this.started = false;
     this.startTime = startTime;
+    this.maxScore = maxScore;
+    this.game = new Game(this)
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
-    this.teamVotes = 0;	
+    this.teamVotes = 0;
   }
 
   setTopic (topic) {
@@ -429,36 +430,43 @@ class GameManager {
     this.getDataForParticipants(this.teamBParticipants, 'B')
   }
 
-  handleTeamAData (result) { 
-    for (var i = 0; i < result.length; i++) {
-	this.teamADelta += result[i];
+  handleTeamData (team, result) {
+    console.log('Result', team, result);
+    if (team == 'A'){
+      for (var i = 0; i < result.length; i++) {
+        if (result[i] == 1) {
+  	      this.teamADelta ++;
+        } else if (result[i] == 2){
+          this.teamADelta --;
+        }
+      }
+      this.teamVotes++;
+      if (this.teamVotes == 2) {
+      	this.game.setNextMove(this.state.playerNumber1, this.game.getDirection(this.teamADelta), this.teamADelta);
+      	this.game.setNextMove(this.state.playerNumber2, this.game.getDirection(this.teamBDelta), this.teamBDelta);
+      	this.game.paddleSerial+=10;
+      	this.teamVotes = 0;
+      	this.teamADelta = 0;
+        this.teamBDelta = 0;
+      }
+    } else {
+      for (var i = 0; i < result.length; i++) {
+        if (result[i] == 1) {
+  	      this.teamBDelta ++;
+        } else if (result[i] == 2){
+          this.teamBDelta --;
+        }
+      }
+      this.teamVotes++;
+      if (this.teamVotes == 2) {
+      	this.game.setNextMove(this.state.playerNumber1, this.game.getDirection(this.teamADelta), this.teamADelta);
+      	this.game.setNextMove(this.state.playerNumber2, this.game.getDirection(this.teamBDelta), this.teamBDelta);
+      	this.game.paddleSerial+=10;
+      	this.teamVotes = 0;
+        this.teamADelta = 0;
+        this.teamBDelta = 0;
+      }
     }
-    this.teamVotes++;
-    if (this.teamVotes == 2) {
-    	this.game.setNextMove(this.state.playerNumber1, getDirection(this.teamADelta), this.teamADelta);
-    	this.game.setNextMove(this.state.playerNumber2, getDirection(this.teamBDelta), this.teamBDelta);
-	this.game.paddleSerial+=10;
-	this.teamVotes = 0;
-	this.teamADelta = 0;
-    }
-    
-    console.log('Team A Result: ', this.teamADelta);
-  }
-
-  handleTeamBData (result) {
-    for (var i = 0; i < result.length; i++) {
-	this.teamBDelta += result[i];
-    }
-    this.teamVotes++;
-    if (this.teamVotes == 2) {
-    	this.game.setNextMove(this.state.playerNumber1, getDirection(this.teamADelta), this.teamADelta);
-    	this.game.setNextMove(this.state.playerNumber2, getDirection(this.teamBDelta), this.teamBDelta);
-	this.game.paddleSerial+=10;
-	this.teamVotes = 0;
-	this.teamBDelta = 0;
-    }
-
-    console.log('Team B Result: ', this.teamBDelta);
   }
 
   getDataForParticipants (participantsList, team) {
@@ -466,7 +474,7 @@ class GameManager {
     return Promise.all(participantsList.map((p) =>{
       console.log(p);
       return swarm.getResource(self.topic, p.user)
-    })).then(this[`handleTeam${team}Data`].bind(this))
+    })).then(this.handleTeamData.bind(this, team))
   }
 
   loop () {
@@ -480,7 +488,7 @@ class GameManager {
   }
 
   start () {
-    console.log('started')
+    this.started = true;
     window.setInterval(() => { this.loop() }, 100)
     window.setInterval(() => { this.dataUpdateLoop() }, 2000)
   }
@@ -493,7 +501,7 @@ class Pong extends Component {
   }
 
   componentDidMount () {
-    this.gameManager = new GameManager(this.props.startTime)
+    this.gameManager = new GameManager(this.props.startTime, this.props.maxScore)
     var eta_ms = this.gameManager.startTime*1000 - Date.now();
     if (eta_ms > 0)
       window.setTimeout(() => this.gameManager.start(), eta_ms);

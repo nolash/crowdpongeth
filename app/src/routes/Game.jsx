@@ -155,6 +155,7 @@ class Game extends Component {
           teamAParticipants={this.state.teamAParticipants}
           teamBParticipants={this.state.teamBParticipants}
           startTime={this.state.startTime}
+          maxScore={this.state.maxScore}
         />
       </div>
     )
