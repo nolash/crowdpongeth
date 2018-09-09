@@ -1,5 +1,7 @@
 # Pong Smart Contracts
 
+Ropsten contract: (0x007c09a13cab3f4a91f5a072a87df3d5958f8727)[https://ropsten.etherscan.io/address/0x007c09a13cab3f4a91f5a072a87df3d5958f8727]
+
 keys.json example:
 ```
 {
