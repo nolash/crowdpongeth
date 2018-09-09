@@ -17,7 +17,8 @@ class Game extends Component {
       startTime: '',
       newParticipantName: '',
       teamAParticipants: [],
-      teamBParticipants: []
+      teamBParticipants: [],
+      maxScore: 0
     }
   }
 
@@ -44,7 +45,8 @@ class Game extends Component {
       teamA: game.teamA,
       teamB: game.teamB,
       topic: game.topic,
-      startTime: game.startTimestamp
+      startTime: game.startTimestamp,
+      maxScore: game.maxScore
     })
   }
 
