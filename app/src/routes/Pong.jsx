@@ -1,3 +1,5 @@
+import React, { Component } from 'react'
+
 class Ball {
   constructor (x, y, vx, vy) {
     this.x = x
@@ -358,5 +360,25 @@ class GameManager {
   }
 }
 
-const gameManager = new GameManager()
-gameManager.start()
+class Pong extends Component {
+
+  componentDidMount () {
+    console.log('STARTING THE GAME')
+    // console.log(this.refs.game)
+    const gameManager = new GameManager()
+    gameManager.start()
+  }
+
+  render () {
+    return (
+      <div>
+        <h3>PONG GAME</h3>
+        <canvas id="game" ref="game" width="512" height="256"></canvas>
+        <div id='timeBox'></div>
+      </div>
+    )
+  }
+
+}
+
+export default Pong

@@ -4,6 +4,10 @@ body {
   font-family: sans-serif;
 }
 
+#game {
+  background-color: #353535;
+}
+
 .main-header {
   margin: 0;
   padding: 20px;
