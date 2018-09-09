@@ -179,7 +179,7 @@ class Game {
   }
 
   drawTime () {
-    document.getElementById('timeBox').innerHTML = Math.round(new Date().getTime() / 1000)
+    document.getElementById('timeBox').innerHTML = 'Time = '+Math.round(new Date().getTime() / 1000)
   }
 
   getDirection () {
@@ -424,8 +424,9 @@ class Pong extends Component {
     }
     return (
       <div>
-        <h3>PONG GAME</h3>
-        <canvas id="game" ref="game" width="512" height="256"></canvas>
+        <div className="row text-center">
+          <canvas id="game" ref="game" width="1024" height="512"></canvas>
+        </div>
         <div id='timeBox'></div>
       </div>
     )

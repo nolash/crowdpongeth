@@ -68,17 +68,20 @@ class NewGame extends Component {
     this.setState({ teamA: e.target.value })
   }
 
+  handleMatchNameChanged (e) {
+    this.setState({ matchName: e.target.value })
+  }
+
   handleTeamBChanged (e) {
     this.setState({ teamB: e.target.value })
   }
 
   async handleCreateNewGame () {
-    const topic = web3.utils.randomHex()
     const tx = await Pong.contract.methods.newGame(
       this.state.maxScore,
       this.state.teamA,
       this.state.teamB,
-      topic
+      web3.utils.sha3(this.state.matchName)
     ).send({ from: this.state.account })
     console.log('new game created: ', tx)
     this.props.history.push('/')
@@ -86,16 +89,16 @@ class NewGame extends Component {
 
   render () {
 
-    setInterval(function() {
-      var kitties = document.getElementsByClassName('gifCat');
-      if (kitties[1].style.display == 'none') {
-        kitties[0].style.display = 'none';
-        kitties[1].style.display = '';
-      } else {
-        kitties[1].style.display = 'none';
-        kitties[0].style.display = '';
-      }
-    }, 600);
+    // setInterval(function() {
+    //   var kitties = document.getElementsByClassName('gifCat');
+    //   if (kitties[1].style.display == 'none') {
+    //     kitties[0].style.display = 'none';
+    //     kitties[1].style.display = '';
+    //   } else {
+    //     kitties[1].style.display = 'none';
+    //     kitties[0].style.display = '';
+    //   }
+    // }, 600);
 
     return (
       <div className="row">
@@ -105,6 +108,11 @@ class NewGame extends Component {
           <div className="text-input-group">
             <div className="text-input-label">Max score:</div>
             <input value={this.state.maxScore} onChange={this.handleMaxScoreChanged.bind(this)} />
+          </div>
+
+          <div className="text-input-group">
+            <div className="text-input-label">Match Name:</div>
+            <input value={this.state.matchName} onChange={this.handleMatchNameChanged.bind(this)} />
           </div>
 
           <div className="text-input-group">

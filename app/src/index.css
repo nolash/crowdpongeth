@@ -6,6 +6,7 @@ body {
 
 #game {
   background-color: #353535;
+  margin: 'auto';
 }
 
 .main-header {

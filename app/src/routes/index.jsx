@@ -4,7 +4,7 @@ import 'popper.js';
 import 'bootstrap/dist/css/bootstrap.min';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../index.css';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch, NavLink } from 'react-router-dom';
 import { hot } from "react-hot-loader";
 import Game from "./Game";
 import Games from "./Games";
@@ -15,8 +15,7 @@ import PongCanvas from "./PongCanvas";
 const Routes = () => (
   <div>
     <div className="main-header">
-      <h1>[[-- Crowd Pong --]]</h1>
-
+      <a to="/"><h1>[[-- Crowd Pong --]]</h1></a>
     </div>
     <div className="main-content">
       <HashRouter>

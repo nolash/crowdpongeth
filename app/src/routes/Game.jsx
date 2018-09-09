@@ -118,7 +118,7 @@ class Game extends Component {
 
   render () {
     return (
-      <div>
+      <div className="container">
         <div className="join-game-form">
           <div className="join-game-label">Your name:</div>
           <input value={this.state.newParticipantName} onChange={this.handleNewParticipantNameChanged.bind(this)}/>
@@ -126,9 +126,9 @@ class Game extends Component {
         </div>
         <br /><br />
 
-        <div>
-          <div className="participant-list-title">{this.state.teamA}</div>
-          <div className="participant-list-title">{this.state.teamB}</div>
+        <div className="row">
+          <div className="col-xs-6 text-center participant-list-title">Team A: {this.state.teamA}</div>
+          <div className="col-xs-6 text-center participant-list-title">Team B: {this.state.teamB}</div>
         </div>
         <div>
           <div className="participants-list">
@@ -138,8 +138,6 @@ class Game extends Component {
             {this.renderParticipantList('teamBParticipants')}
           </div>
         </div>
-
-        <br /><br />
 
         <PongCanvas topic={this.state.topic} privateKey={this.state.privateKey} />
       </div>

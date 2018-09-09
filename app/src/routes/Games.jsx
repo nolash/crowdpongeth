@@ -27,6 +27,7 @@ class Games extends Component {
     }
 
     Pong.socket.getPastEvents('NewGame', eventFilterConfig, async (err, events) => {
+      console.log(events);
       if (err) {
         $this.handleEventError(err)
       } else {
@@ -51,16 +52,16 @@ class Games extends Component {
 
   render () {
 
-    setInterval(function() {
-      var kitties = document.getElementsByClassName('gifCat');
-      if (kitties[1].style.display == 'none') {
-        kitties[0].style.display = 'none';
-        kitties[1].style.display = '';
-      } else {
-        kitties[1].style.display = 'none';
-        kitties[0].style.display = '';
-      }
-    }, 400);
+    // setInterval(function() {
+    //   var kitties = document.getElementsByClassName('gifCat');
+    //   if (kitties[1].style.display == 'none') {
+    //     kitties[0].style.display = 'none';
+    //     kitties[1].style.display = '';
+    //   } else {
+    //     kitties[1].style.display = 'none';
+    //     kitties[0].style.display = '';
+    //   }
+    // }, 400);
 
     return (
       <div className="row">
