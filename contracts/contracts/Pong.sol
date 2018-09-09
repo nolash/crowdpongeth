@@ -14,26 +14,28 @@ contract Pong {
 		address owner;
 		string teamA;
 		string teamB;
+		bytes32 topic;
 	}
 
 	Game[] public games;
 	uint256 latestGame = 0;
 
-	event NewGame(uint256 index, string teamA, string teamB);
+	event NewGame(uint256 index, string teamA, string teamB, bytes32 topic);
 	event NewParticipant(uint256 gameIndex, uint256 participantIndex, address user, string name);
 
 	// creates a new game
 	// sender will be owner
 	// sender names the teams
-	function newGame(uint8 maxScore, string teamA, string teamB) public {
+	function newGame(uint8 maxScore, string teamA, string teamB, bytes32 topic) public {
 		Game memory g;
 		g.owner = msg.sender;
 		g.maxScore = maxScore;
 		g.teamA = teamA;
 		g.teamB = teamB;
+		g.topic = topic;
 		g.startTimestamp = now + JOIN_PERIOD;
 		games.push(g);
-		emit NewGame(latestGame, teamA, teamB);
+		emit NewGame(latestGame, teamA, teamB, topic);
 		latestGame++;
 	}
 

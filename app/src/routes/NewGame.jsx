@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import web3 from '../eth/web3'
 import Pong from '../web3Contracts/Pong'
-import { withRouter } from 'react-router-dom'
 
 class NewGame extends Component {
 
@@ -74,10 +73,12 @@ class NewGame extends Component {
   }
 
   async handleCreateNewGame () {
+    const topic = web3.utils.randomHex(32)
     const tx = await Pong.contract.methods.newGame(
       this.state.maxScore,
       this.state.teamA,
-      this.state.teamB
+      this.state.teamB,
+      topic
     ).send({ from: this.state.account })
     console.log('new game created: ', tx)
     this.props.history.push('/')
