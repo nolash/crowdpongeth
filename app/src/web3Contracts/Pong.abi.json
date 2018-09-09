@@ -1,0 +1,304 @@
+[
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "games",
+    "outputs": [
+      {
+        "name": "maxScore",
+        "type": "uint8"
+      },
+      {
+        "name": "startTimestamp",
+        "type": "uint256"
+      },
+      {
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "name": "teamA",
+        "type": "string"
+      },
+      {
+        "name": "teamB",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "JOIN_PERIOD",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "teamA",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "teamB",
+        "type": "string"
+      }
+    ],
+    "name": "NewGame",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "gameIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "participantIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "NewParticipant",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "maxScore",
+        "type": "uint8"
+      },
+      {
+        "name": "teamA",
+        "type": "string"
+      },
+      {
+        "name": "teamB",
+        "type": "string"
+      }
+    ],
+    "name": "newGame",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      },
+      {
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "joinGame",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTeamA",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTeamB",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getStartBlock",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getParticipantCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      },
+      {
+        "name": "idx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getParticipantName",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "gameStarted",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "canJoin",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "gameIndex",
+        "type": "uint256"
+      },
+      {
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "isParticipating",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
