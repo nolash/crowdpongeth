@@ -25,8 +25,8 @@ Mike Calvanese @mikec
 
 ### Stash
 
-Contract: 0x957a63a9c458c5c40b84e558a7d0b279871be622
-Application: http://37.157.197.161:8500/bzz:/crowdpongeth.test
+Contract: 0x957a63a9c458c5c40b84e558a7d0b279871be622   
+Application: http://37.157.197.161:8500/bzz:/crowdpongeth.test   
 Code: https://github.com/nolash/crowdpongeth
 
 ### Swarm:
