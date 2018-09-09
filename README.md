@@ -23,9 +23,9 @@ The player area has identical pixel sizes and paddle/ball velocities. Thus, give
 
 ### Stash
 
-Contract: 0x957a63a9c458c5c40b84e558a7d0b279871be622
-Application: http://37.157.197.161:8500/bzz:/crowdpongeth.test
-Code: https://github.com/nolash/crowdpongeth
+* Contract: 0x957a63a9c458c5c40b84e558a7d0b279871be622
+* Application: http://37.157.197.161:8500/bzz:/crowdpongeth.test
+* Code: https://github.com/nolash/crowdpongeth
 
 ### Swarm:
 
