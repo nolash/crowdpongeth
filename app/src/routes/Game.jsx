@@ -8,6 +8,8 @@ class Game extends Component {
     super(props)
     this.state = {
       account: '',
+      publicAddress: '',
+      privateKey: '',
       teamA: '',
       teamB: '',
       newParticipantName: '',
@@ -79,9 +81,14 @@ class Game extends Component {
   }
 
   async handleJoinGameClicked () {
+    const acct = web3.eth.accounts.create()
+    this.setState({
+      publicAddress: acct.address,
+      privateKey: acct.privateKey
+    })
     const tx = await Pong.contract.methods.joinGame(
       this.props.match.params.gameIndex,
-      this.state.account,
+      acct.address,
       this.state.newParticipantName
     ).send({ from: this.state.account })
     console.log('new participant added: ', tx)
