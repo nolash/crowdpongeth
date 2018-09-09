@@ -303,6 +303,8 @@ class StateManager {
     // we need swarm and web3 here
   contructor () {
     this.nextMove = 'NOTHING'
+    this.teamADelta = 0;
+    this.teamBDelta = 0;
   }
 
   aggregateMovements () {
@@ -370,6 +372,7 @@ class GameManager {
     this.startTime = startTime;
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
+    this.teamVotes = 0;	
   }
 
   setTopic (topic) {
@@ -407,12 +410,35 @@ class GameManager {
     }
   }
 
-  handleTeamAData (result) {
-    console.log('Team A Input: ', result)
+  handleTeamAData (result) { 
+    for (var i = 0; i < result.length; i++) {
+	this.teamADelta += result[i];
+    }
+    this.teamVotes++;
+    if (this.teamVotes == 2) {
+    	this.game.setNextMove(this.state.playerNumber1, getDirection(this.teamADelta), this.teamADelta);
+    	this.game.setNextMove(this.state.playerNumber2, getDirection(this.teamBDelta), this.teamBDelta);
+	this.game.paddleSerial+=10;
+	this.teamVotes = 0;
+	this.teamADelta = 0;
+    }
+    
+    console.log('Team A Result: ', this.teamADelta);
   }
 
   handleTeamBData (result) {
-    console.log('Team B Input: ', result)
+    for (var i = 0; i < result.length; i++) {
+	this.teamBDelta += result[i];
+    }
+    this.teamVotes++;
+    if (this.teamVotes == 2) {
+    	this.game.setNextMove(this.state.playerNumber1, getDirection(this.teamADelta), this.teamADelta);
+    	this.game.setNextMove(this.state.playerNumber2, getDirection(this.teamBDelta), this.teamBDelta);
+	this.game.paddleSerial+=10;
+        console.log('Team B Result: ', this.teamBDelta);
+	this.teamVotes = 0;
+	this.teamBDelta = 0;
+    }
   }
 
   getDataForParticipants (participantsList, team) {
