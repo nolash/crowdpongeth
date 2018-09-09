@@ -89,14 +89,6 @@ class KeyListener {
   isPressed (key) {
     return this.pressedKeys[key] ? true : false
   }
-
-  addKeyPressListener (keyCode, callback) {
-    document.addEventListener('keypress', function (e) {
-      if (e.keyCode === keyCode) {
-        callback(e)
-      }
-    })
-  }
 }
 
 class Paddle {
@@ -192,7 +184,7 @@ class Game {
     document.getElementById('timeBox').innerHTML = 'Time = '+Math.round(new Date().getTime() / 1000)
   }
 
-  getDirection () {
+/*  getDirection () {
     if (this.keys.isDownPressed()) {
       return  'DOWN'
     } else if (this.keys.isUpPressed()) {
@@ -201,7 +193,7 @@ class Game {
 
     return 'NOTHING'
   }
-
+*/
   getInitialPaddle1 () {
     var paddle = new Paddle(5, 0)
     paddle.y = this.height / 2 - paddle.height / 2
@@ -319,8 +311,6 @@ class StateManager {
     // we need swarm and web3 here
   contructor () {
     this.nextMove = 'NOTHING'
-    this.teamADelta = 0;
-    this.teamBDelta = 0;
   }
 
   aggregateMovements () {
@@ -391,6 +381,8 @@ class GameManager {
     this.stateManager = new StateManager()
     this.state = this.stateManager.getInitialState()
     this.teamVotes = 0;
+    this.teamADelta =0;
+    this.teamBDelta =0;
   }
 
   setTopic (topic) {
@@ -418,14 +410,14 @@ class GameManager {
   }
 
   dataUpdateLoop () {
-    let direction = this.game.getDirection()
+    //let direction = this.game.getDirection()
     const currentTime = Math.floor(new Date().getTime() / 1000)
-    if (direction == 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
+    /*if (direction == 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
       if (this.topic && this.privateKey) {
         console.log('Sending: 0')
         swarm.updateResource(this.privateKey, this.topic, 0)
       }
-    }
+    }*/
     this.getDataForParticipants(this.teamAParticipants, 'A')
     this.getDataForParticipants(this.teamBParticipants, 'B')
   }
@@ -441,7 +433,10 @@ class GameManager {
         }
       }
       this.teamVotes++;
+      console.log('teamvotes.getDirection', this.teamVotes, team, result);
       if (this.teamVotes == 2) {
+        console.log('this.game.getDirection(this.teamADelta)', this.game.getDirection(this.teamADelta), this.teamADelta)
+
       	this.game.setNextMove(this.state.playerNumber1, this.game.getDirection(this.teamADelta), this.teamADelta);
       	this.game.setNextMove(this.state.playerNumber2, this.game.getDirection(this.teamBDelta), this.teamBDelta);
       	this.game.paddleSerial+=10;
