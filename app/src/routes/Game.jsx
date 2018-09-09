@@ -6,11 +6,11 @@ import PongCanvas from './PongCanvas'
 class Game extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       account: '',
-      publicAddress: '',
-      privateKey: '',
+      publicAddress: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')).publicAddress : '',
+      privateKey: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')).privateKey : '',
       teamA: '',
       teamB: '',
       topic: '',
@@ -88,7 +88,7 @@ class Game extends Component {
 
   async handleJoinGameClicked () {
     const acct = web3.eth.accounts.create()
-
+    window.localStorage.setItem('account', JSON.stringify(acct));
     this.setState({
       publicAddress: acct.address,
       privateKey: acct.privateKey
@@ -100,6 +100,10 @@ class Game extends Component {
       this.state.newParticipantName
     ).send({ from: this.state.account })
     console.log('new participant added: ', tx)
+  }
+
+  async handleLeaveGameClicked () {
+    window.localStorage.removeItem('account');
   }
 
   renderParticipantList (listName, i) {
@@ -125,7 +129,8 @@ class Game extends Component {
         <div className="join-game-form">
           <div className="join-game-label">Your name:</div>
           <input value={this.state.newParticipantName} onChange={this.handleNewParticipantNameChanged.bind(this)}/>
-          <div className="btn" onClick={this.handleJoinGameClicked.bind(this)}>Join game</div>
+          <div className="btn btn-info" onClick={this.handleJoinGameClicked.bind(this)}>Join</div>
+          {this.state.privateKey.length && <div className="btn btn-danger" onClick={this.handleLeaveGameClicked.bind(this)}>Leave</div>}
         </div>
         <br /><br />
 

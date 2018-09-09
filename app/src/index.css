@@ -28,8 +28,7 @@ a {
 }
 
 .btn {
-  background: #19b119;
-  color: white;
+  margin: 5px 0px;
   padding: 8px 15px;
   border-radius: 3px;
   cursor: pointer;
