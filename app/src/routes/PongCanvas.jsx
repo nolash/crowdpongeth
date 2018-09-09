@@ -137,6 +137,12 @@ class Game {
     this.display1 = new ValueDisplay(this.width / 4, 25)
     this.display2 = new ValueDisplay(this.width * 3 / 4, 25)
 
+    // paddleSerial increments by 10 every time (both) the paddles' position is updated
+    // ballSerial increments by 1 every time the ball's position is updated
+    this.paddleSerial = 0;
+    this.ballSerial = 0;
+    this.won = 0;
+
     let paddle1 = this.getInitialPaddle1()
     this.p1 = new Player(1, 'SomeName1', paddle1)
     let paddle2 = this.getInitialPaddle2()
@@ -249,6 +255,10 @@ class Game {
   }
 
   updateBallMovement () {
+    // ball can't move beyond the one second MRU resolution, lest we miss where the paddles are
+    if (this.ballSerial - this.paddleSerial == 10) {
+	return;
+    }
     if (this.ball.isMovingRight()) {
       // P2 collision detection
       // p2.x behind or at ball && p2.x infront moved ball
@@ -288,6 +298,7 @@ class Game {
     (this.ball.vy > 0 && this.ball.y + this.ball.height > this.height)) {
       this.ball.vy = -this.ball.vy
     }
+    this.ballSerial++;
   }
 
   updateScore () {
@@ -295,6 +306,13 @@ class Game {
       this.score(this.p1)
     } else if (this.ball.x + this.ball.width <= 0) {
       this.score(this.p2)
+    }
+    if (this.score(this.p1) == this.maxScore) {
+       console.log(this.teamA + " wins");
+       this.won = 1;
+    } else if (this.score(this.p2) == this.maxScore) {
+       console.log(this.teamB + " wins");
+       this.won = 2;
     }
   }
 }
@@ -435,10 +453,11 @@ class GameManager {
     	this.game.setNextMove(this.state.playerNumber1, getDirection(this.teamADelta), this.teamADelta);
     	this.game.setNextMove(this.state.playerNumber2, getDirection(this.teamBDelta), this.teamBDelta);
 	this.game.paddleSerial+=10;
-        console.log('Team B Result: ', this.teamBDelta);
 	this.teamVotes = 0;
 	this.teamBDelta = 0;
     }
+
+    console.log('Team B Result: ', this.teamBDelta);
   }
 
   getDataForParticipants (participantsList, team) {
@@ -460,8 +479,8 @@ class GameManager {
     // let direction = this.game.getDirection()
     // this.stateManager.sendMove(direction)
     this.state = this.stateManager.getState()
-    this.game.setNextMove(this.state.playerNumber1, this.state.direction1, this.state.velocity1)
-    this.game.setNextMove(this.state.playerNumber2, this.state.direction2, this.state.velocity2)
+    //this.game.setNextMove(this.state.playerNumber1, this.state.direction1, this.state.velocity1)
+    //this.game.setNextMove(this.state.playerNumber2, this.state.direction2, this.state.velocity2)
     this.game.update()
     this.game.draw()
   }
