@@ -63,7 +63,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "secp256k1": "^3.5.2",
-    "web3": "^1.0.0-beta.34",
+    "web3": "^1.0.0-beta.36",
     "websocket": "^1.0.26"
   },
   "config": {
