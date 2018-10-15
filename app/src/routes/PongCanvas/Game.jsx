@@ -1,6 +1,7 @@
 import {
   Ball, ValueDisplay, Player, Paddle,
 } from './Components';
+import KeyListener from './KeyListener';
 
 class Game {
   constructor(maxScore) {
@@ -10,6 +11,7 @@ class Game {
     this.maxScore = maxScore;
     this.context = canvas.getContext('2d');
     this.context.fillStyle = 'white';
+    this.keys = new KeyListener(gameManager);
 
     // display number
     this.display1 = new ValueDisplay(this.width / 4, 25);
