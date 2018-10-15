@@ -8,7 +8,7 @@ const timeLength = 7;
 const levelLength = 1;
 const updateMinLength = topicLength + userLength + timeLength + levelLength;
 
-function mruUpdateDigest(o) {
+export function mruUpdateDigest(o) {
   let topicBytes;
   let userBytes;
 
@@ -73,7 +73,6 @@ function mruUpdateDigest(o) {
 
   return web3.utils.sha3(web3.utils.bytesToHex(new Uint8Array(buf)));
 }
-
 
 module.exports = {
   mruUpdateDigest,

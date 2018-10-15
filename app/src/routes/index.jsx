@@ -1,11 +1,11 @@
 import React from 'react';
 import 'jquery';
 import 'popper.js';
- import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../index.css';
 import {
-  HashRouter, Route, Switch
+  HashRouter, Route, Switch,
 } from 'react-router-dom';
 import { hot } from 'react-hot-loader';
 import Game from './Game';
