@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+
 const web3 = new Web3();
 
 const topicLength = 32;
@@ -8,66 +9,64 @@ const levelLength = 1;
 const updateMinLength = topicLength + userLength + timeLength + levelLength;
 
 function mruUpdateDigest(o) {
-  var topicBytes = undefined;
-  var dataBytes = undefined;
-  var userBytes = undefined;
+  let topicBytes;
+  let userBytes;
 
   if (!web3.utils.isHexStrict(o.data)) {
-    console.error("data must be a valid 0x prefixed hex value");
+    console.error('data must be a valid 0x prefixed hex value');
     return undefined;
   }
-
-  dataBytes = web3.utils.hexToBytes(o.data);
+  const dataBytes = web3.utils.hexToBytes(o.data);
 
   try {
     topicBytes = web3.utils.hexToBytes(o.topic);
-  } catch(err) {
-    console.error("topicBytes: " + err);
+  } catch (err) {
+    console.error(`topicBytes: ${err}`);
     return undefined;
   }
 
   try {
     userBytes = web3.utils.hexToBytes(o.user);
-  } catch(err) {
-    console.error("topicBytes: " + err);
+  } catch (err) {
+    console.error(`topicBytes: ${err}`);
     return undefined;
   }
 
-  var buf = new ArrayBuffer(updateMinLength + dataBytes.length);
-  var view = new DataView(buf);
-  var cursor = 0;
+  const buf = new ArrayBuffer(updateMinLength + dataBytes.length);
+  const view = new DataView(buf);
+  let cursor = 0;
 
-  topicBytes.forEach(function(v) {
+  topicBytes.forEach((v) => {
     view.setUint8(cursor, v);
     cursor++;
   });
 
-  userBytes.forEach(function(v) {
+  userBytes.forEach((v) => {
     view.setUint8(cursor, v);
     cursor++;
   });
 
   // time is little endian
-  var timeBuf = new ArrayBuffer(4);
-  var timeView = new DataView(timeBuf);
-  //view.setUint32(cursor, o.time);
+  const timeBuf = new ArrayBuffer(4);
+  const timeView = new DataView(timeBuf);
+  // view.setUint32(cursor, o.time);
   timeView.setUint32(0, o.time);
-  var timeBufArray = new Uint8Array(timeBuf);
-  for (var i = 0; i < 4; i++) {
-    view.setUint8(cursor, timeBufArray[3-i]);
+  const timeBufArray = new Uint8Array(timeBuf);
+  for (let i = 0; i < 4; i++) {
+    view.setUint8(cursor, timeBufArray[3 - i]);
     cursor++;
   }
 
-  for (i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     view.setUint8(cursor, 0);
     cursor++;
   }
 
-  //cursor += 4;
+  // cursor += 4;
   view.setUint8(cursor, o.level);
   cursor++;
 
-  dataBytes.forEach(function(v) {
+  dataBytes.forEach((v) => {
     view.setUint8(cursor, v);
     cursor++;
   });
@@ -77,5 +76,5 @@ function mruUpdateDigest(o) {
 
 
 module.exports = {
-  mruUpdateDigest: mruUpdateDigest
-}
+  mruUpdateDigest,
+};
