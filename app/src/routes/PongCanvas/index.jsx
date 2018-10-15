@@ -75,7 +75,7 @@ class GameManager {
     this.started = false;
     this.startTime = startTime;
     this.maxScore = maxScore;
-    this.game = new Game(this);
+    this.game = new Game(this.maxScore);
     this.stateManager = new StateManager();
     this.state = this.stateManager.getInitialState();
     this.teamVotes = {};
@@ -110,7 +110,7 @@ class GameManager {
   dataUpdateLoop() {
     // let direction = this.game.getDirection()
     /* const currentTime = Math.floor(new Date().getTime() / 1000);
-    if (direction == 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
+    if (direction === 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
       if (this.topic && this.privateKey) {
         console.log('Sending: 0')
         swarm.updateResource(this.privateKey, this.topic, 0)

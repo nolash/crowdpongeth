@@ -3,11 +3,11 @@ import {
 } from './Components';
 
 class Game {
-  constructor(gameManager) {
+  constructor(maxScore) {
     const canvas = document.getElementById('game');
     this.width = canvas.width;
     this.height = canvas.height;
-    this.maxScore = gameManager.maxScore;
+    this.maxScore = maxScore;
     this.context = canvas.getContext('2d');
     this.context.fillStyle = 'white';
 
@@ -70,16 +70,6 @@ class Game {
     document.getElementById('timeBox').innerHTML = `Time = ${Math.round(new Date().getTime() / 1000)}`;
   }
 
-  /*  getDirection () {
-    if (this.keys.isDownPressed()) {
-      return  'DOWN'
-    } else if (this.keys.isUpPressed()) {
-      return 'UP'
-    }
-
-    return 'NOTHING'
-  }
-*/
   getInitialPaddle1() {
     const paddle = new Paddle(5, 0);
     paddle.y = this.height / 2 - paddle.height / 2;

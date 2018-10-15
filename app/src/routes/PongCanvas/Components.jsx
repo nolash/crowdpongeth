@@ -47,7 +47,6 @@ class Paddle {
   constructor(x, y, players) {
     this.x = x;
     this.y = y;
-    this.players = players; // [] //TODO: Do we really need that
     this.width = 2;
     this.height = 40;
     this.score = 0;
