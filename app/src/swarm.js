@@ -1,7 +1,7 @@
 import {mruUpdateDigest} from './utils';
 import Web3 from 'web3';
 const web3 = new Web3();
-const SWARM_NODE='http://37.157.197.161:8500';
+const SWARM_NODE='https://swarm-gateways.net';
 // const SWARM_NODE='http://10.0.1.14:8500';
 // const SWARM_NODE='http://localhost:8500';
 
