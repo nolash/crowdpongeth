@@ -30,7 +30,7 @@ class Games extends Component {
       console.log(events);
       if (err) {
         console.log(err)
-        $this.handleEventError(err)
+        $this.handleEventErr(err)
       } else {
         Pong.socket.events['NewGame'](eventFilterConfig)
           .on('data', $this.handleNewGame.bind($this))
@@ -52,18 +52,6 @@ class Games extends Component {
   }
 
   render () {
-
-    // setInterval(function() {
-    //   var kitties = document.getElementsByClassName('gifCat');
-    //   if (kitties[1].style.display == 'none') {
-    //     kitties[0].style.display = 'none';
-    //     kitties[1].style.display = '';
-    //   } else {
-    //     kitties[1].style.display = 'none';
-    //     kitties[0].style.display = '';
-    //   }
-    // }, 400);
-
     return (
       <div className="row">
         <div className="col-md-3"><img className="gifCat" src="https://media0.giphy.com/media/vcYJ10AVGFZbG/giphy.gif"/></div>

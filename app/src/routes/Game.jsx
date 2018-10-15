@@ -60,7 +60,7 @@ class Game extends Component {
 
     Pong.socket.getPastEvents('NewParticipant', eventFilterConfig, async (err, events) => {
       if (err) {
-        $this.handleEventError(err)
+        $this.handleEventErr(err)
       } else {
         Pong.socket.events['NewParticipant'](eventFilterConfig)
           .on('data', $this.handleNewParticipant.bind($this))
