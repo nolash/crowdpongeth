@@ -60,9 +60,9 @@ async function updateResource(privateKey, topic, state) {
   const account = web3.eth.accounts.wallet[0].address;
 
   const metaResponse = JSON.parse(
-    await sendRequest(`/bzz-resource:/?topic=${topic}&user=${account}&meta=1`, 'GET', 'text', null),
+    await sendRequest(`/bzz-feed:/?topic=${topic}&user=${account}&meta=1`, 'GET', 'text', null)
   );
-  console.log(metaResponse);
+  
 
   const resourceUpdate = {
     topic,
@@ -82,13 +82,13 @@ async function updateResource(privateKey, topic, state) {
   const signature = `0x${sigObj.signature.toString('hex')}0${sigObj.recovery.toString()}`;
   // console.log('Signature', signature);
 
-  const updateResponse = await sendRequest(`/bzz-resource:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`,
+  const updateResponse = await sendRequest(`/bzz-feed:/?topic=${resourceUpdate.topic}&user=${resourceUpdate.user}&level=${resourceUpdate.level}&time=${resourceUpdate.time}&signature=${signature}`,
     'POST', 'text', data);
   console.log('Update successful', updateResponse);
 }
 
 function getResource(topic, owner) {
-  return sendRequest(`/bzz-resource:/?topic=${topic}&user=${owner}&hint.level=0`,
+  return sendRequest(`/bzz-feed:/?topic=${topic}&user=${owner}&hint.level=0`,
     'GET', 'arraybuffer', null);
 }
 
