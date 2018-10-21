@@ -1,40 +1,40 @@
-import Web3 from 'web3';
-
-const web3 = new Web3();
+// Kudos to https://github.com/ethersphere/swarm-guide/blob/9b6fe38d9ec6e4ad1f92860e757d631358d3df54/contents/usage/feed.rst
+import web3 from 'web3';
 
 const topicLength = 32;
 const userLength = 20;
 const timeLength = 7;
 const levelLength = 1;
-const updateMinLength = topicLength + userLength + timeLength + levelLength;
+const headerLength = 8;
+const updateMinLength = topicLength + userLength + timeLength + levelLength + headerLength;
 
-export function mruUpdateDigest(o) {
+function feedUpdateDigest(request /* request */, data /* UInt8Array */) {
   let topicBytes;
   let userBytes;
+  let protocolVersion = 0;
 
-  if (!web3.utils.isHexStrict(o.data)) {
-    console.error('data must be a valid 0x prefixed hex value');
-    return undefined;
-  }
-  const dataBytes = web3.utils.hexToBytes(o.data);
+  protocolVersion = request.protocolVersion;
 
   try {
-    topicBytes = web3.utils.hexToBytes(o.topic);
+    topicBytes = web3.utils.hexToBytes(request.feed.topic);
   } catch (err) {
     console.error(`topicBytes: ${err}`);
     return undefined;
   }
 
   try {
-    userBytes = web3.utils.hexToBytes(o.user);
+    userBytes = web3.utils.hexToBytes(request.feed.user);
   } catch (err) {
     console.error(`topicBytes: ${err}`);
     return undefined;
   }
 
-  const buf = new ArrayBuffer(updateMinLength + dataBytes.length);
+  const buf = new ArrayBuffer(updateMinLength + data.length);
   const view = new DataView(buf);
   let cursor = 0;
+
+  view.setUint8(cursor, protocolVersion); // first byte is protocol version.
+  cursor += headerLength; // leave the next 7 bytes (padding) set to zero
 
   topicBytes.forEach((v) => {
     view.setUint8(cursor, v);
@@ -46,34 +46,22 @@ export function mruUpdateDigest(o) {
     cursor++;
   });
 
-  // time is little endian
-  const timeBuf = new ArrayBuffer(4);
-  const timeView = new DataView(timeBuf);
-  // view.setUint32(cursor, o.time);
-  timeView.setUint32(0, o.time);
-  const timeBufArray = new Uint8Array(timeBuf);
-  for (let i = 0; i < 4; i++) {
-    view.setUint8(cursor, timeBufArray[3 - i]);
-    cursor++;
-  }
+  // time is little-endian
+  view.setUint32(cursor, request.epoch.time, true);
+  cursor += 7;
 
-  for (let i = 0; i < 3; i++) {
-    view.setUint8(cursor, 0);
-    cursor++;
-  }
-
-  // cursor += 4;
-  view.setUint8(cursor, o.level);
+  view.setUint8(cursor, request.epoch.level);
   cursor++;
 
-  dataBytes.forEach((v) => {
+  data.forEach((v) => {
     view.setUint8(cursor, v);
     cursor++;
   });
+  console.log(web3.utils.bytesToHex(new Uint8Array(buf)));
 
   return web3.utils.sha3(web3.utils.bytesToHex(new Uint8Array(buf)));
 }
 
 module.exports = {
-  mruUpdateDigest,
+  digest: feedUpdateDigest,
 };

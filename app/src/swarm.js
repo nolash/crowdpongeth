@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { mruUpdateDigest } from './utils';
+import { digest } from './utils';
 import webAppConfig from './webAppConfig';
 
 const web3 = new Web3();
@@ -60,9 +60,9 @@ async function updateResource(privateKey, topic, state) {
   const account = web3.eth.accounts.wallet[0].address;
 
   const metaResponse = JSON.parse(
-    await sendRequest(`/bzz-feed:/?topic=${topic}&user=${account}&meta=1`, 'GET', 'text', null)
+    await sendRequest(`/bzz-feed:/?topic=${topic}&user=${account}&meta=1`, 'GET', 'text', null),
   );
-  
+
 
   const resourceUpdate = {
     topic,
@@ -73,7 +73,8 @@ async function updateResource(privateKey, topic, state) {
   };
 
   // console.log('Resource update', resourceUpdate)
-  const dataToSign = mruUpdateDigest(resourceUpdate);
+  const dataBytes = web3.utils.hexToBytes(data);
+  const dataToSign = digest(metaResponse, dataBytes);
   // console.log('Data to sign', dataToSign, 'by account', account);
 
   const secp256k1 = require('secp256k1');
