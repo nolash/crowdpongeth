@@ -103,7 +103,7 @@ class Game {
 
   setNextMove(playerNumber, direction, velocity) {
     const player = playerNumber === 1 ? this.p1 : this.p2;
-    console.log('setnextmove', playerNumber, direction, velocity);
+    //console.log('setnextmove', playerNumber, direction, velocity);
     if (direction === 'DOWN') { // DOWN
       player.paddle.y = Math.min(this.height - player.paddle.height, player.paddle.y + velocity * 6);
     } else if (direction === 'UP') { // UP

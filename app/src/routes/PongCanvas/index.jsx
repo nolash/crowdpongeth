@@ -4,25 +4,25 @@ import swarm from '../../swarm';
 import Game from './Game';
 
 class StateManager {
-  // we need swarm and web3 here
-  contructor() {
-    this.nextMove = 'NOTHING';
+  constructor () {
+    this.state = {
+      player1: {
+        number: 1,
+        letter: 'A',
+        direction: 'NOTHING',
+        velocity: 1,
+      },
+      player2: {
+        number: 2,
+        letter: 'B',
+        direction: 'NOTHING',
+        velocity: 1,
+      }
+    };
   }
 
-  aggregateMovements() {
-    // TODO separate two teams
-    // get movement of each member
-    let velocity = 0;
-    for (let i = 0; i < 5; i++) {
-      // TODO if up then add positive velocity
-      // TODO if down then add minus velocity
-      velocity += 1;
-      // velocity -= 1
-    }
-    return {
-      velocity1: velocity,
-      velocity2: velocity,
-    };
+  getState() {
+    return this.state;
   }
 
   getDirection(velocity) {
@@ -35,38 +35,17 @@ class StateManager {
     return direction;
   }
 
-  getInitialState() {
-    return {
-      playerNumber1: 1,
-      playerNumber2: 2,
-      direction1: 'NOTHING',
-      direction2: 'NOTHING',
-      velocity1: 0,
-      velocity2: 0,
+  nextState(velocities) {
+    this.state = {
+      player1: Object.assign({}, this.state.player1, {
+        velocity: Math.abs(velocities.A),
+        direction: this.getDirection(velocities.A),
+      }),
+      player2: Object.assign({}, this.state.player2, {
+        velocity: Math.abs(velocities.B),
+        direction: this.getDirection(velocities.B),
+      }),
     };
-  }
-
-  getState() {
-    // TODO: get and aggregate real state
-    const velocities = this.aggregateMovements();
-    const velocity1 = velocities.velocity1;
-    const velocity2 = velocities.velocity2;
-
-    const direction1 = this.getDirection(velocity1);
-    const direction2 = this.getDirection(velocity2);
-    return {
-      playerNumber1: 1,
-      playerNumber2: 2,
-      direction1,
-      direction2: this.nextMove, // TODO change to direction2
-      velocity1,
-      velocity2,
-    };
-  }
-
-  sendMove(direction) {
-    // TODO send real position
-    this.nextMove = direction;
   }
 }
 
@@ -77,10 +56,6 @@ class GameManager {
     this.maxScore = maxScore;
     this.game = new Game(this);
     this.stateManager = new StateManager();
-    this.state = this.stateManager.getInitialState();
-    this.teamVotes = {};
-    this.teamADelta = 0;
-    this.teamBDelta = 0;
   }
 
   setTopic(topic) {
@@ -108,7 +83,9 @@ class GameManager {
   }
 
   dataUpdateLoop() {
-    // let direction = this.game.getDirection()
+    // This does not make sense - it should depend on a direction of a player team
+    // the user is member of
+    // let direction = this.game.getDirection() 
     /* const currentTime = Math.floor(new Date().getTime() / 1000);
     if (direction === 'NOTHING' && currentTime != this.game.keys.lastKeyPressedTime) {
       if (this.topic && this.privateKey) {
@@ -116,64 +93,55 @@ class GameManager {
         swarm.updateResource(this.privateKey, this.topic, 0)
       }
     } */
-    this.getDataForParticipants(this.teamAParticipants, 'A');
-    this.getDataForParticipants(this.teamBParticipants, 'B');
+    Promise.all([
+      this.getDataForParticipants(this.teamAParticipants, 'A'),
+      this.getDataForParticipants(this.teamBParticipants, 'B')
+    ]).then((movements) => {
+      this.handleTeamData({
+        A: movements[0],
+        B: movements[1],
+      });
+    });
   }
 
-  handleTeamData(team, result) {
-    console.log('Result', team, result);
-    if (team === 'A') {
-      for (let i = 0; i < result.length; i++) {
-        if (result[i] === 1) {
-          this.teamADelta++;
-        } else if (result[i] === 2) {
-          this.teamADelta--;
-        }
-      }
-      this.teamVotes.a = 1;
-      if (this.teamVotes.a && this.teamVotes.b) {
-        this.game.setNextMove(this.state.playerNumber1, this.stateManager.getDirection(this.teamADelta), this.teamADelta);
-        this.game.setNextMove(this.state.playerNumber2, this.stateManager.getDirection(this.teamBDelta), this.teamBDelta);
-        this.game.paddleSerial += 10;
-        this.teamVotes = {};
-        this.teamADelta = 0;
-        this.teamBDelta = 0;
-      }
-    } else {
-      for (let i = 0; i < result.length; i++) {
-        if (result[i] === 1) {
-          this.teamBDelta++;
-        } else if (result[i] === 2) {
-          this.teamBDelta--;
-        }
-      }
-      this.teamVotes.b = 1;
-      if (this.teamVotes.a && this.teamVotes.b) {
-        this.game.setNextMove(this.state.playerNumber1, this.stateManager.getDirection(this.teamADelta), this.teamADelta);
-        this.game.setNextMove(this.state.playerNumber2, this.stateManager.getDirection(this.teamBDelta), this.teamBDelta);
-        this.game.paddleSerial += 10;
-        this.teamVotes = {};
-        this.teamADelta = 0;
-        this.teamBDelta = 0;
+  handleTeamData(results) {
+    // Handle edge case when somethign goes awry for one team
+    if (!results.A || !results.B) {
+      return;
+    }
+    const deltas = {
+      A: 0,
+      B: 0,
+    }
+    for (let i = 0; i < results.A.length; i++) {
+      if (results.A[i] === 1) {
+        deltas.A++;
+      } else if (results.A[i] === 2) {
+        deltas.A--;
       }
     }
+    for (let i = 0; i < results.B.length; i++) {
+      if (results.B[i] === 1) {
+        deltas.B++;
+      } else if (results.B[i] === 2) {
+        deltas.B--;
+      }
+    }
+    this.stateManager.nextState(deltas);
   }
 
   getDataForParticipants(participantsList, team) {
     const topic = this.topic;
-    return Promise.all(participantsList.map(p => swarm.getResource(topic, p.user))).then((result) => {
-      this.handleTeamData(team, result);
-    }).catch((e) => {
-      console.error(e, team, participantsList.length);
-    });
+    return Promise.all(participantsList.map(p => swarm.getResource(topic, p.user)))
+      .catch((e) => {
+        console.error(e, team, participantsList.length);
+      });
   }
 
   loop() {
-    // let direction = this.game.getDirection()
-    // this.stateManager.sendMove(direction)
-    this.state = this.stateManager.getState();
-    // this.game.setNextMove(this.state.playerNumber1, this.state.direction1, this.state.velocity1)
-    // this.game.setNextMove(this.state.playerNumber2, this.state.direction2, this.state.velocity2)
+    const state = this.stateManager.getState();
+    this.game.setNextMove(state.player1.number, state.player1.direction, state.player1.velocity);
+    this.game.setNextMove(state.player2.number, state.player2.direction, state.player2.velocity);
     this.game.update();
     this.game.draw();
   }
