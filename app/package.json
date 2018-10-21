@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Pong app.",
   "scripts": {
-    "test": "eslint .",
+    "test": "eslint src --ext js,jsx",
     "start": "NODE_ENV=development ./node_modules/.bin/webpack-dev-server",
     "build": "NODE_ENV=production ./node_modules/.bin/webpack --mode=production"
   },

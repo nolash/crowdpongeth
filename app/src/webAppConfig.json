@@ -2,16 +2,19 @@
   "development": {
     "web3Url": "http://localhost:8545",
     "socketWeb3Url": "ws://localhost:8545",
-    "pongAddress": "0x88415776a1f25e21a26e9d4c2aec3198bc5dcc23"
+    "pongAddress": "0xad84405aef5d241e1bb264f0a58e238e221d70de",
+    "swarm": "http://localhost:8500"
   },
   "rinkeby": {
     "web3Url": "https://rinkeby.infura.io",
     "socketWeb3Url": "wss://rinkeby.infura.io/_ws",
-    "pongAddress": ""
+    "pongAddress": "",
+    "swarm": "https://swarm-gateways.net"
   },
   "ropsten": {
     "web3Url": "https://ropsten.infura.io",
     "socketWeb3Url": "wss://ropsten.infura.io/_ws",
-    "pongAddress": "0x957a63a9c458c5c40b84e558a7d0b279871be622"
+    "pongAddress": "0x957a63a9c458c5c40b84e558a7d0b279871be622",
+    "swarm": "https://swarm-gateways.net"
   }
 }

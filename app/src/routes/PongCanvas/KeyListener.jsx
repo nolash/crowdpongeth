@@ -1,7 +1,7 @@
 import swarm from '../../swarm';
 
-const keyUpCode = 65;
-const keyDownCode = 81;
+const keyUpCode = 65; // a
+const keyDownCode = 81; // q
 
 class KeyListener {
   constructor(gameManager) {

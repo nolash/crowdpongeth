@@ -1,10 +1,8 @@
 import Web3 from 'web3';
 import { mruUpdateDigest } from './utils';
+import webAppConfig from './webAppConfig';
 
 const web3 = new Web3();
-const SWARM_NODE = 'https://swarm-gateways.net';
-// const SWARM_NODE='http://10.0.1.14:8500';
-// const SWARM_NODE='http://localhost:8500';
 
 function sendRequest(url, requestType, responseType, data) {
   return new Promise(((resolve, reject) => {
@@ -33,7 +31,7 @@ function sendRequest(url, requestType, responseType, data) {
       return buf;
     }
 
-    xhttp.open(requestType, `${SWARM_NODE}${url}`, true);
+    xhttp.open(requestType, `${webAppConfig.swarm}${url}`, true);
     xhttp.setRequestHeader('Accept', 'application/octet-stream');
     xhttp.setRequestHeader('Access-Control-Allow-Method', requestType);
     xhttp.responseType = responseType;

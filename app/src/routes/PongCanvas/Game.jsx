@@ -4,11 +4,11 @@ import {
 import KeyListener from './KeyListener';
 
 class Game {
-  constructor(maxScore) {
+  constructor(gameManager) {
     const canvas = document.getElementById('game');
     this.width = canvas.width;
     this.height = canvas.height;
-    this.maxScore = maxScore;
+    this.maxScore = gameManager.maxScore;
     this.context = canvas.getContext('2d');
     this.context.fillStyle = 'white';
     this.keys = new KeyListener(gameManager);

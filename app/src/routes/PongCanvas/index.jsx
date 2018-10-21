@@ -75,7 +75,7 @@ class GameManager {
     this.started = false;
     this.startTime = startTime;
     this.maxScore = maxScore;
-    this.game = new Game(this.maxScore);
+    this.game = new Game(this);
     this.stateManager = new StateManager();
     this.state = this.stateManager.getInitialState();
     this.teamVotes = {};
